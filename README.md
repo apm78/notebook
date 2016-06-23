@@ -6,9 +6,8 @@ After cloning the repository you build the demo with:
 
 `mvn install`
 
-Then you can deploy and run the WAR file on your server of choice or test it with:
-
-`mvn jetty:run-war`
+This project uses Vaadin CDI and so a full application server is needed to run this web application.
+It is tested with Wildfly 10.
 
 ## License
 Copyright 2015 akquinet engineering GmbH
