@@ -33,4 +33,14 @@
   @include valo;
 
   // Insert your own theme rules here
+  .notebook-bold-font
+  {
+    font-weight: bold;
+  }
+
+  .notebook-larger-font
+  {
+    font-size: 16px;
+  }
+
 }

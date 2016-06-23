@@ -4,8 +4,10 @@ import com.vaadin.cdi.UIScoped;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Grid;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
 import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToZonedDateTimeConverter;
 
@@ -27,7 +29,7 @@ public class OverviewViewImpl implements OverviewView
 
     public OverviewViewImpl()
     {
-        final Grid grid = new Grid("Notes");
+        final Grid grid = new Grid();
         grid.setContainerDataSource(container);
         grid.removeColumn(PROP_ID);
         grid.getDefaultHeaderRow().getCell(PROP_TITLE).setHtml("<b>Title</b>");
@@ -41,7 +43,11 @@ public class OverviewViewImpl implements OverviewView
 
         grid.setColumnOrder(PROP_TITLE, PROP_DESCRIPTION, PROP_TIME);
 
+        final Label header = new Label("All Notes");
+        header.addStyleName(ValoTheme.LABEL_H2);
         rootLayout.setMargin(true);
+        rootLayout.addComponent(header);
+
         rootLayout.addComponent(grid);
     }
 

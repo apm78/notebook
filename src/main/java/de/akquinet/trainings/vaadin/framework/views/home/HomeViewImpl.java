@@ -5,6 +5,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
 
 import java.time.format.DateTimeFormatter;
@@ -24,9 +25,11 @@ public class HomeViewImpl implements HomeView
     public HomeViewImpl()
     {
         rootLayout.setMargin(true);
-        rootLayout.addComponent(noteLayout);
+        final Label header = new Label("Current Notes");
+        header.addStyleName(ValoTheme.LABEL_H2);
+        rootLayout.addComponent(header);
 
-        noteLayout.setCaption("Current Notes");
+        rootLayout.addComponent(noteLayout);
         noteLayout.setSpacing(true);
     }
 
@@ -50,10 +53,12 @@ public class HomeViewImpl implements HomeView
             final VerticalLayout layout = new VerticalLayout();
             layout.setMargin(true);
             layout.setSpacing(true);
-            layout.addComponent(new Label(
+            final Label timeLabel = new Label(
                     String.format(UI.getCurrent().getLocale(), "%s on %s",
                             note.getTime().format(timeFormatter),
-                            note.getTime().format(dateFormatter))));
+                            note.getTime().format(dateFormatter)));
+            timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
+            layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
             panel.setContent(layout);
             noteLayout.addComponent(panel);
