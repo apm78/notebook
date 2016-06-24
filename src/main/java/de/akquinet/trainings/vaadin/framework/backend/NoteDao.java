@@ -16,4 +16,6 @@ public interface NoteDao
     Note updateNote(Note note);
 
     List<Note> getNotesSortedByDateAsc();
+
+    Note findNoteById(long id);
 }

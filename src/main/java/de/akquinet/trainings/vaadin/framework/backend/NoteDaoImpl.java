@@ -1,5 +1,7 @@
 package de.akquinet.trainings.vaadin.framework.backend;
 
+import com.vaadin.cdi.UIScoped;
+
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.stream.Collectors;
  *
  * @author Axel Meier, akquinet engineering GmbH
  */
+@UIScoped
 public class NoteDaoImpl implements NoteDao
 {
     private long idCounter = 0L;
@@ -24,7 +27,6 @@ public class NoteDaoImpl implements NoteDao
         notes.add(new Note(nextId(), "Dishes", "Do the dishes.", ZonedDateTime.now(zoneId).plusDays(1)));
         notes.add(new Note(nextId(), "TV time", "Watch tv.", ZonedDateTime.now(zoneId).plusHours(4)));
         notes.add(new Note(nextId(), "Work", "Go to work.", ZonedDateTime.now(zoneId).minusHours(4)));
-
     }
 
     @Override
@@ -49,7 +51,12 @@ public class NoteDaoImpl implements NoteDao
         return -1;
     }
 
-    private Note findNoteById(final long id)
+    public Note findNoteById(final long id)
+    {
+        return findNoteByIdImpl(id);
+    }
+
+    private Note findNoteByIdImpl(final long id)
     {
         for (final Note n : notes){
             if (n.getId() == id){
@@ -65,7 +72,7 @@ public class NoteDaoImpl implements NoteDao
 
     private boolean containsNote(final Note note)
     {
-        return note.getId() != null && findNoteById(note.getId()) != null;
+        return note.getId() != null && findNoteByIdImpl(note.getId()) != null;
 
     }
 
@@ -80,7 +87,7 @@ public class NoteDaoImpl implements NoteDao
     {
         if (containsNote(note))
         {
-            final Note n = findNoteById(note.getId());
+            final Note n = findNoteByIdImpl(note.getId());
             n.setTitle(note.getTitle());
             n.setDescription(note.getDescription());
             n.setTime(note.getTime());

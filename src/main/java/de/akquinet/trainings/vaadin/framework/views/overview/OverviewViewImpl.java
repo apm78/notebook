@@ -32,7 +32,9 @@ public class OverviewViewImpl implements OverviewView
         final Grid grid = new Grid();
         grid.setContainerDataSource(container);
         grid.removeColumn(PROP_ID);
-        grid.getDefaultHeaderRow().getCell(PROP_TITLE).setHtml("<b>Title</b>");
+        grid.getDefaultHeaderRow().getCell(PROP_TITLE).setStyleName(ValoTheme.LABEL_BOLD);
+//        grid.getDefaultHeaderRow().getCell(PROP_TITLE).setHtml("<b>Title</b>");
+        grid.getColumn(PROP_TITLE).setHeaderCaption("Title");
         grid.getColumn(PROP_DESCRIPTION).setHeaderCaption("Description");
         grid.getColumn(PROP_TIME).setHeaderCaption("Time");
         grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(),

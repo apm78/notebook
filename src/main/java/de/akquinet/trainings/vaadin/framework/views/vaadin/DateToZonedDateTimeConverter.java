@@ -14,12 +14,18 @@ public class DateToZonedDateTimeConverter implements Converter<Date, ZonedDateTi
     @Override
     public ZonedDateTime convertToModel(final Date date, final Class<? extends ZonedDateTime> aClass, final Locale locale) throws ConversionException
     {
+        if (date == null){
+            return null;
+        }
         return ZonedDateTime.ofInstant(date.toInstant(), BrowserTimeZone.getBrowserTimeZoneId());
     }
 
     @Override
     public Date convertToPresentation(final ZonedDateTime zonedDateTime, final Class<? extends Date> aClass, final Locale locale) throws ConversionException
     {
+        if (zonedDateTime == null){
+            return null;
+        }
         return Date.from(zonedDateTime.toInstant());
     }
 

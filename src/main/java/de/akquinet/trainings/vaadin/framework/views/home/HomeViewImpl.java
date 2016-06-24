@@ -1,11 +1,16 @@
 package de.akquinet.trainings.vaadin.framework.views.home;
 
 import com.vaadin.cdi.UIScoped;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
+import de.akquinet.trainings.vaadin.framework.View;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
 
 import java.time.format.DateTimeFormatter;
@@ -22,6 +27,10 @@ public class HomeViewImpl implements HomeView
 
     private final VerticalLayout noteLayout = new VerticalLayout();
 
+    private Observer observer;
+
+    private Window editorWindow;
+
     public HomeViewImpl()
     {
         rootLayout.setMargin(true);
@@ -31,6 +40,14 @@ public class HomeViewImpl implements HomeView
 
         rootLayout.addComponent(noteLayout);
         noteLayout.setSpacing(true);
+
+        rootLayout.addDetachListener(e -> closeEditorWindow());
+    }
+
+    @Override
+    public void setObserver(final Observer observer)
+    {
+        this.observer = observer;
     }
 
     @Override
@@ -60,8 +77,46 @@ public class HomeViewImpl implements HomeView
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
+            layout.addComponent(new Button("edit", e -> {
+                if (observer != null)
+                {
+                    observer.onEdit(note.getId());
+                }
+            }));
             panel.setContent(layout);
             noteLayout.addComponent(panel);
         }
+    }
+
+    private void closeEditorWindow()
+    {
+        if (editorWindow != null)
+        {
+            editorWindow.close();
+            editorWindow = null;
+        }
+    }
+
+    @Override
+    public void showEditor(final View editView)
+    {
+        closeEditorWindow();
+        editorWindow = new Window("Edit Note");
+        editorWindow.center();
+        editorWindow.addCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
+        editorWindow.setModal(true);
+        editorWindow.setClosable(true);
+        final VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.setMargin(true);
+        verticalLayout.addComponent(editView.getComponent(Component.class));
+        editorWindow.setContent(verticalLayout);
+        editorWindow.addCloseListener(e -> editorWindow = null);
+        rootLayout.getUI().addWindow(editorWindow);
+    }
+
+    @Override
+    public void closeEditor()
+    {
+        closeEditorWindow();
     }
 }
