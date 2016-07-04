@@ -2,8 +2,8 @@ package de.akquinet.trainings.vaadin.framework.backend;
 
 import com.vaadin.cdi.UIScoped;
 
+import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,11 +22,11 @@ public class NoteDaoImpl implements NoteDao
     private ZoneId zoneId;
 
     public NoteDaoImpl(){
-        zoneId = ZoneId.of("Europe/Paris");
-        notes.add(new Note(nextId(), "Laundry", "Do the laundry.", ZonedDateTime.now(zoneId)));
-        notes.add(new Note(nextId(), "Dishes", "Do the dishes.", ZonedDateTime.now(zoneId).plusDays(1)));
-        notes.add(new Note(nextId(), "TV time", "Watch tv.", ZonedDateTime.now(zoneId).plusHours(4)));
-        notes.add(new Note(nextId(), "Work", "Go to work.", ZonedDateTime.now(zoneId).minusHours(4)));
+        zoneId = ZoneId.systemDefault();
+        notes.add(new Note(nextId(), "Laundry", "Do the laundry.", LocalDateTime.now(zoneId)));
+        notes.add(new Note(nextId(), "Dishes", "Do the dishes.", LocalDateTime.now(zoneId).plusDays(1)));
+        notes.add(new Note(nextId(), "TV time", "Watch tv.", LocalDateTime.now(zoneId).plusHours(4)));
+        notes.add(new Note(nextId(), "Work", "Go to work.", LocalDateTime.now(zoneId).minusHours(4)));
     }
 
     @Override
@@ -103,7 +103,7 @@ public class NoteDaoImpl implements NoteDao
     public List<Note> getNotesSortedByDateAsc()
     {
         final List<Note> sortedList = new ArrayList<>(notes.stream()
-                .filter(note -> note.getTime().isAfter(ZonedDateTime.now(zoneId).minusHours(1)))
+                .filter(note -> note.getTime().isAfter(LocalDateTime.now(zoneId).minusHours(1)))
                 .collect(Collectors.toList()));
         sortedList.sort((o1, o2) -> o1.getTime().compareTo(o2.getTime()));
         return sortedList;

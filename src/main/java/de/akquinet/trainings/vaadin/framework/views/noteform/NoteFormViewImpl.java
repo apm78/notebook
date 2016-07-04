@@ -15,7 +15,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
-import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToZonedDateTimeConverter;
+import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToLocalDateTimeConverter;
 import de.akquinet.trainings.vaadin.framework.views.vaadin.LazyValidationFieldGroup;
 
 /**
@@ -49,7 +49,7 @@ public class NoteFormViewImpl implements NoteFormView
         final DateField dateField = new DateField("Date");
         dateField.setWidth("100%");
         dateField.setResolution(Resolution.MINUTE);
-        dateField.setConverter(new DateToZonedDateTimeConverter());
+        dateField.setConverter(new DateToLocalDateTimeConverter());
         dateField.setRequired(true);
         dateField.setRequiredError("Date of note is mandatory.");
 

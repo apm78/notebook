@@ -20,7 +20,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.trainings.vaadin.framework.View;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
 import de.akquinet.trainings.vaadin.framework.views.vaadin.ConfirmationDialog;
-import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToZonedDateTimeConverter;
+import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToLocalDateTimeConverter;
 
 import java.util.Collection;
 import java.util.Set;
@@ -68,7 +68,7 @@ public class OverviewViewImpl implements OverviewView
         grid.getColumn(PROP_DESCRIPTION).setHeaderCaption("Description");
         grid.getColumn(PROP_TIME).setHeaderCaption("Time");
         grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(),
-                new DateToZonedDateTimeConverter());
+                new DateToLocalDateTimeConverter());
         grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event -> {
             final Note selectedNote = (Note) event.getItemId();
             if (selectedNote != null)

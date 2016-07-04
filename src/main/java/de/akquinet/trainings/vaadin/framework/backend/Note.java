@@ -1,6 +1,6 @@
 package de.akquinet.trainings.vaadin.framework.backend;
 
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -10,14 +10,14 @@ public class Note
     private Long id;
     private String title;
     private String description;
-    private ZonedDateTime time;
+    private LocalDateTime time;
 
     public Note()
     {
 
     }
 
-    public Note(final long id, final String title, final String description, ZonedDateTime time)
+    public Note(final long id, final String title, final String description, LocalDateTime time)
     {
         this.title = title;
         this.description = description;
@@ -55,12 +55,12 @@ public class Note
         this.description = description;
     }
 
-    public ZonedDateTime getTime()
+    public LocalDateTime getTime()
     {
         return time;
     }
 
-    public void setTime(final ZonedDateTime time)
+    public void setTime(final LocalDateTime time)
     {
         this.time = time;
     }
