@@ -12,6 +12,8 @@ public interface OverviewView extends View
 {
     void setObserver(Observer observer);
 
+    void selectNote(final Note note);
+
     void setNotes(Collection<Note> notes);
 
     void setEditorView(de.akquinet.trainings.vaadin.framework.View view);
@@ -20,5 +22,9 @@ public interface OverviewView extends View
 
     interface Observer {
         void onSelect(Note selectedNote);
+
+        void onAdd();
+
+        void onDelete(Note note);
     }
 }

@@ -16,6 +16,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.trainings.vaadin.framework.backend.Note;
 import de.akquinet.trainings.vaadin.framework.views.vaadin.DateToZonedDateTimeConverter;
+import de.akquinet.trainings.vaadin.framework.views.vaadin.LazyValidationFieldGroup;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -27,7 +28,7 @@ public class NoteFormViewImpl implements NoteFormView
     private static final String PROP_TIME = "time";
 
     private final VerticalLayout rootLayout = new VerticalLayout();
-    private final FieldGroup fieldGroup = new FieldGroup();
+    private final FieldGroup fieldGroup = new LazyValidationFieldGroup();
     private Observer observer;
     private final Label title;
 
@@ -38,9 +39,11 @@ public class NoteFormViewImpl implements NoteFormView
 
         final TextField titleField = new TextField("Title");
         titleField.setWidth("100%");
+        titleField.setNullRepresentation("");
         titleField.setRequired(true);
         titleField.setRequiredError("Title of note is mandatory.");
         final TextArea descriptionField = new TextArea("Desciption");
+        descriptionField.setNullRepresentation("");
         descriptionField.setWidth("100%");
         descriptionField.setRows(6);
         final DateField dateField = new DateField("Date");
@@ -80,7 +83,7 @@ public class NoteFormViewImpl implements NoteFormView
                         }
                         catch (FieldGroup.CommitException e)
                         {
-                            Notification.show("Note couldn't be saved!");
+                            Notification.show("Note couldn't be saved!", Notification.Type.WARNING_MESSAGE);
                             e.printStackTrace();
                         }
                     }

@@ -33,7 +33,10 @@ public class NoteFormPresenterImpl implements NoteFormPresenter, NoteFormView.Ob
         final Note updatedNote = noteDao.updateNote(note);
         noteFormView.setNote(updatedNote);
 
-        observer.onSave();
+        if (observer != null)
+        {
+            observer.onSave();
+        }
     }
 
     @Override
