@@ -59,7 +59,7 @@ public class HomeViewImpl implements HomeView
     @Override
     public void setNotes(final Collection<Note> notes)
     {
-        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss",
+        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm",
                 UI.getCurrent().getLocale());
         final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d yyyy",
                 UI.getCurrent().getLocale());
