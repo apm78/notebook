@@ -101,7 +101,7 @@ public class HomeViewImpl implements HomeView
     public void showEditor(final View editView)
     {
         closeEditorWindow();
-        editorWindow = new Window("Edit Note");
+        editorWindow = new Window();
         editorWindow.center();
         editorWindow.addCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
         editorWindow.setModal(true);

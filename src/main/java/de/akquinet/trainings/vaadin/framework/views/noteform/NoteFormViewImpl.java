@@ -29,6 +29,7 @@ public class NoteFormViewImpl implements NoteFormView
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final FieldGroup fieldGroup = new FieldGroup();
     private Observer observer;
+    private final Label title;
 
     public NoteFormViewImpl()
     {
@@ -91,14 +92,12 @@ public class NoteFormViewImpl implements NoteFormView
         buttonLayout.setComponentAlignment(saveButton, Alignment.BOTTOM_RIGHT);
         buttonLayout.setExpandRatio(cancelButton, 1f);
 
-        final Label title = new Label("Edit Note");
-        title.addStyleName(ValoTheme.LABEL_H2);
+        title = new Label();
+        title.addStyleName(ValoTheme.LABEL_BOLD);
         rootLayout.addComponent(title);
         rootLayout.addComponent(formLayout);
         rootLayout.setWidth("600px");
-        rootLayout.setHeight("450px");
         rootLayout.addComponent(buttonLayout);
-        rootLayout.setExpandRatio(buttonLayout, 1f);
     }
 
     @Override
@@ -117,6 +116,7 @@ public class NoteFormViewImpl implements NoteFormView
     public void setNote(final Note note)
     {
         fieldGroup.setItemDataSource(new BeanItem<>(note, Note.class));
+        title.setValue(note.getId() == null ? "New Note" : "Edit Note");
     }
 
     @Override
