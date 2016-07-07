@@ -8,6 +8,7 @@ import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -25,7 +26,7 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
     public void onEnter()
     {
         homeView.setObserver(this);
-        homeView.setNotes(noteDao.getNotesSortedByDateAsc(""));
+        homeView.setNotes(getNotesSortedByDateAscNotOlder1Hour());
     }
 
     @Override
@@ -50,7 +51,12 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
     public void onSave()
     {
         homeView.closeEditor();
-        homeView.setNotes(noteDao.getNotesSortedByDateAsc(""));
+        homeView.setNotes(getNotesSortedByDateAscNotOlder1Hour());
+    }
+
+    private List<NoteDto> getNotesSortedByDateAscNotOlder1Hour()
+    {
+        return noteDao.getNotesSortedByDateAscNotOlderHour("", 1);
     }
 
     @Override

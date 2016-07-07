@@ -1,9 +1,9 @@
 package de.akquinet.engineering.notebook.ui.views.vaadin;
 
 import com.vaadin.data.util.converter.Converter;
+import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
@@ -18,7 +18,7 @@ public class DateToLocalDateTimeConverter implements Converter<Date, LocalDateTi
         if (date == null){
             return null;
         }
-        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        return DateTimeConverter.toLocalDateTime(date);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class DateToLocalDateTimeConverter implements Converter<Date, LocalDateTi
         if (localDateTime == null){
             return null;
         }
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+        return DateTimeConverter.toDate(localDateTime);
     }
 
     @Override

@@ -17,7 +17,7 @@ public interface NoteDao
 
     NoteDto updateNote(NoteDto note, String userId);
 
-    List<NoteDto> getNotesSortedByDateAsc(String userId);
+    List<NoteDto> getNotesSortedByDateAscNotOlderHour(String userId, long hour);
 
     NoteDto findNoteById(long id, String userId);
 }

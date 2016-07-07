@@ -28,7 +28,7 @@
 <body>
 
 <div class="container">
-    <h2>Login to Notebook</h2>
+    <h2 class="text-center">Login to Notebook</h2>
     <form class="form-horizontal" role="form" method="post" action="j_security_check">
         <div class="form-group">
             <label class="control-label col-sm-2" for="username">User name:</label>

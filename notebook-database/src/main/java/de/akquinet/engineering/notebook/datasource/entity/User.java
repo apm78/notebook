@@ -3,13 +3,25 @@ package de.akquinet.engineering.notebook.datasource.entity;
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
 
+import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_ALL_USERS;
+import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_USER_BY_ID;
+
 @Entity
 @Table(name = "cm_user")
+@NamedQueries({
+        @NamedQuery(name = FIND_ALL_USERS, query = "select user from User user order by user.login"),
+        @NamedQuery(name = FIND_USER_BY_ID, query = "select user from User user where user.id = :id")
+})
 public class User extends AbstractEntity {
+
+    public static final String FIND_ALL_USERS = "User.findAllUsers";
+    public static final String FIND_USER_BY_ID = "User.findUserById";
 
     @Basic
     private String login;

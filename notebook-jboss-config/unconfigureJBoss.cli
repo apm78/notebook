@@ -1,0 +1,9 @@
+connect
+
+/subsystem=security/security-domain=Notebook/:remove
+
+/subsystem=logging/logger=de.akquinet:remove
+
+/:reload
+
+quit

@@ -3,5 +3,5 @@
         "http://www.jboss.org/j2ee/dtd/jboss-web_3_0.dtd">
 
 <jboss-web>
-    <context-root>notebook</context-root>
+    <context-root>/notebook</context-root>
 </jboss-web>

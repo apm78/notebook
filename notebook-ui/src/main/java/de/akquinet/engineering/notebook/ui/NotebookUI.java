@@ -6,8 +6,11 @@ import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIViewProvider;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
 import com.vaadin.server.Responsive;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Component;
@@ -75,7 +78,15 @@ public class NotebookUI extends UI
         final Button dataButton = new Button("Overview", FontAwesome.TABLE);
         dataButton.addClickListener(e -> getNavigator().navigateTo(OverviewViewNavigation.VIEW_NAME));
         dataButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-        navigationBody.addComponents(homeButton, dataButton);
+
+        final Button logoutButton = new Button("Logout", FontAwesome.SIGN_OUT);
+        logoutButton.addClickListener(e -> {
+            VaadinSession.getCurrent().getSession().invalidate();
+            Page.getCurrent().setLocation(VaadinServlet.getCurrent().getServletContext().getContextPath());
+        });
+        logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+
+        navigationBody.addComponents(homeButton, dataButton, logoutButton);
         navigationLayout.addComponents(navigationBody);
         return navigationLayout;
     }

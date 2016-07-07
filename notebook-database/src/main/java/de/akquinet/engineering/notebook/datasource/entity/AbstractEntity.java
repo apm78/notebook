@@ -10,7 +10,6 @@ public abstract class AbstractEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @SuppressWarnings({"UnusedDeclaration"})
     private Long id;
 
     public Long getId() {

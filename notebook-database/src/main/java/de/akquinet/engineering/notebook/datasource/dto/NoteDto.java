@@ -1,5 +1,8 @@
 package de.akquinet.engineering.notebook.datasource.dto;
 
+import de.akquinet.engineering.notebook.datasource.entity.Note;
+import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
+
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -22,7 +25,8 @@ public class NoteDto
 
     }
 
-    public NoteDto(final Long id, final String title, final String description, LocalDateTime time)
+    public NoteDto(final Long id, final String title,
+                   final String description, final LocalDateTime time)
     {
         this.id = id;
         this.title = title;
@@ -30,10 +34,15 @@ public class NoteDto
         this.time = time;
     }
 
-    public NoteDto(final Long id, final String title, final String description, Date time)
+    public NoteDto(final Note note)
     {
-        this(id, title, description,
-                LocalDateTime.ofInstant(time.toInstant(), ZoneId.systemDefault()));
+        this(note.getId(), note.getTitle(), note.getDescription(), note.getTime());
+    }
+
+    public NoteDto(final Long id, final String title,
+                   final String description, final Date time)
+    {
+        this(id, title, description, DateTimeConverter.toLocalDateTime(time));
     }
 
     public Long getId()

@@ -30,6 +30,7 @@
             <web-resource-name>restricted</web-resource-name>
             <description/>
             <url-pattern>/app/*</url-pattern>
+            <url-pattern>/pages/*</url-pattern>
         </web-resource-collection>
 
         <auth-constraint>
@@ -43,8 +44,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>Notebook</realm-name>
         <form-login-config>
-            <form-login-page>/login.jsp</form-login-page>
-            <form-error-page>/error.jsp</form-error-page>
+            <form-login-page>/pages/login.jsp</form-login-page>
+            <form-error-page>/pages/error.jsp</form-error-page>
         </form-login-config>
     </login-config>
 </web-app>
