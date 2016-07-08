@@ -74,11 +74,15 @@ public class NotebookUI extends UI
         navigationBody.addComponent(logo);
 
         // display user info
+        final CssLayout userLayout = new CssLayout();
         final String userName = JaasAccessControl.getCurrentRequest().getUserPrincipal().getName();
         final Label userInfo = new Label();
+        userInfo.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         userInfo.setValue(userName);
-        userInfo.addStyleName(ValoTheme.MENU_SUBTITLE);
-        navigationBody.addComponent(new CssLayout(userInfo));
+        final Label divider = new Label();
+        divider.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
+        userLayout.addComponents(userInfo, divider);
+        navigationBody.addComponent(userLayout);
 
         navigationBody.addStyleName(ValoTheme.MENU_PART);
         final Button homeButton = new Button("Home", FontAwesome.HOME);
