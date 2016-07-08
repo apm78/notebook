@@ -65,7 +65,6 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     public void onDelete(final NoteDto note)
     {
         noteModel.deleteNote(note);
-//        VaadinSession.getCurrent().getSession().
 
         resetView();
     }

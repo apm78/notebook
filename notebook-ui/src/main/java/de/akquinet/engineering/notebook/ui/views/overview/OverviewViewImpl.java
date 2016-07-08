@@ -17,11 +17,14 @@ import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.i18n.I18n;
 import de.akquinet.engineering.notebook.ui.views.vaadin.ConfirmationDialog;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 
+import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 
@@ -37,15 +40,23 @@ public class OverviewViewImpl implements OverviewView
     private final static String PROP_TIME = "time";
     private final static String PROP_DELETE = "delete";
 
+    @Inject
+    private I18n i18n;
+
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final BeanItemContainer<NoteDto> container = new BeanItemContainer<>(NoteDto.class);
     private final Panel editorPanel = new Panel();
     private Observer observer;
-    private final Grid grid;
+    private final Grid grid = new Grid();
 
     public OverviewViewImpl()
     {
-        grid = new Grid();
+
+    }
+
+    @PostConstruct
+    public void init()
+    {
         final GeneratedPropertyContainer gpc = new GeneratedPropertyContainer(container);
         grid.setContainerDataSource(gpc);
         gpc.addGeneratedProperty(PROP_DELETE, new PropertyValueGenerator<String>()
@@ -59,29 +70,34 @@ public class OverviewViewImpl implements OverviewView
             @Override
             public String getValue(final Item item, final Object itemId, final Object propertyId)
             {
-                return "Delete";
+                return i18n.get("overview.table.delete.button");
             }
         });
         grid.removeColumn(PROP_ID);
         grid.getDefaultHeaderRow().getCell(PROP_TITLE).setStyleName(ValoTheme.LABEL_BOLD);
-        grid.getColumn(PROP_TITLE).setHeaderCaption("Title");
-        grid.getColumn(PROP_DESCRIPTION).setHeaderCaption("Description");
-        grid.getColumn(PROP_TIME).setHeaderCaption("Time");
+        grid.getColumn(PROP_TITLE).setHeaderCaption(i18n.get("overview.table.title.header"));
+        grid.getColumn(PROP_DESCRIPTION).setHeaderCaption(i18n.get("overview.table.description.header"));
+        grid.getColumn(PROP_TIME).setHeaderCaption(i18n.get("overview.table.time.header"));
         grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(),
-                new DateToLocalDateTimeConverter());
-        grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event -> {
+                                              new DateToLocalDateTimeConverter());
+        grid.getColumn(PROP_DELETE).setHeaderCaption(i18n.get("overview.table.delete.header"));
+        grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event ->
+        {
             final NoteDto selectedNote = (NoteDto) event.getItemId();
             if (selectedNote != null)
             {
                 final ConfirmationDialog confirmDlg = new ConfirmationDialog();
-                confirmDlg.getWindow().setCaption("Delete Note");
-                confirmDlg.getDescription().setValue("Do you really want to delete this note?");
-                confirmDlg.getOkButton().addClickListener(e -> {
+                confirmDlg.getWindow().setCaption(i18n.get("dialog.delete.note.caption"));
+                confirmDlg.getDescription().setValue(i18n.get("dialog.delete.note.description"));
+                confirmDlg.getOkButton().addClickListener(e ->
+                {
                     if (observer != null)
                     {
                         observer.onDelete(selectedNote);
                     }
                 });
+                confirmDlg.getOkButton().setCaption(i18n.get("dialog.confirmButton.caption"));
+                confirmDlg.getCancelButton().setCaption(i18n.get("form.buttonCancel.caption"));
                 confirmDlg.show();
             }
         }));
@@ -90,9 +106,10 @@ public class OverviewViewImpl implements OverviewView
         grid.setHeightByRows(8d);
         grid.setWidth("100%");
 
-        grid.setColumnOrder(PROP_TITLE, PROP_DESCRIPTION, PROP_TIME);
+        grid.setColumnOrder(PROP_TITLE, PROP_DESCRIPTION, PROP_TIME, PROP_DELETE);
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        grid.addSelectionListener((SelectionEvent.SelectionListener) event -> {
+        grid.addSelectionListener((SelectionEvent.SelectionListener) event ->
+        {
             if (observer != null)
             {
                 final Set<Object> selected = event.getSelected();
@@ -108,8 +125,9 @@ public class OverviewViewImpl implements OverviewView
             }
         });
         final Grid.FooterRow footer = grid.appendFooterRow();
-        final Button addButton = new Button("Add Note");
-        addButton.addClickListener((Button.ClickListener) event -> {
+        final Button addButton = new Button(i18n.get("overview.addNotesButton.caption"));
+        addButton.addClickListener((Button.ClickListener) event ->
+        {
             if (observer != null)
             {
                 observer.onAdd();
@@ -117,7 +135,7 @@ public class OverviewViewImpl implements OverviewView
         });
         footer.getCell(PROP_DELETE).setComponent(addButton);
 
-        final Label header = new Label("All Notes");
+        final Label header = new Label(i18n.get("overview.title"));
         header.addStyleName(ValoTheme.LABEL_H2);
         rootLayout.setMargin(true);
         rootLayout.setSpacing(true);
@@ -161,12 +179,11 @@ public class OverviewViewImpl implements OverviewView
         return type.cast(rootLayout);
     }
 
-
     @Override
     public void setNotes(final Collection<NoteDto> notes)
     {
         container.removeAllItems();
         container.addAll(notes);
-        container.sort(new Object[]{PROP_TIME}, new boolean[]{true});
+        container.sort(new Object[] { PROP_TIME }, new boolean[] { true });
     }
 }
