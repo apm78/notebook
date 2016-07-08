@@ -4,6 +4,7 @@ import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Theme;
 import com.vaadin.cdi.CDIUI;
 import com.vaadin.cdi.CDIViewProvider;
+import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
@@ -46,6 +47,7 @@ public class NotebookUI extends UI
         layout.setSizeFull();
         final Panel contentPanel = new Panel();
         contentPanel.setSizeFull();
+
         layout.addComponents(createNavigation(), contentPanel);
         layout.setExpandRatio(contentPanel, 1f);
 
@@ -71,6 +73,13 @@ public class NotebookUI extends UI
         logo.setPrimaryStyleName(ValoTheme.MENU_LOGO);
         navigationBody.addComponent(logo);
 
+        // display user info
+        final String userName = JaasAccessControl.getCurrentRequest().getUserPrincipal().getName();
+        final Label userInfo = new Label();
+        userInfo.setValue(userName);
+        userInfo.addStyleName(ValoTheme.MENU_SUBTITLE);
+        navigationBody.addComponent(new CssLayout(userInfo));
+
         navigationBody.addStyleName(ValoTheme.MENU_PART);
         final Button homeButton = new Button("Home", FontAwesome.HOME);
         homeButton.addClickListener(e -> getNavigator().navigateTo(HomeViewNavigation.VIEW_NAME));
@@ -83,6 +92,7 @@ public class NotebookUI extends UI
         logoutButton.addClickListener(e -> {
             VaadinSession.getCurrent().getSession().invalidate();
             Page.getCurrent().setLocation(VaadinServlet.getCurrent().getServletContext().getContextPath());
+//            JaasAccessControl.logout();
         });
         logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
 

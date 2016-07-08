@@ -1,9 +1,9 @@
 package de.akquinet.engineering.notebook.ui.views.home;
 
 import com.vaadin.cdi.UIScoped;
-import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-import de.akquinet.engineering.notebook.datasource.dao.NoteDao;
+import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.model.NoteModel;
 import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
 import javax.enterprise.inject.spi.CDI;
@@ -20,7 +20,7 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
     private HomeView homeView;
 
     @Inject
-    private NoteDao noteDao;
+    private NoteModel noteModel;
 
     @Override
     public void onEnter()
@@ -40,7 +40,7 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
     {
         final NoteFormPresenter noteFormPresenter = CDI.current().select(NoteFormPresenter.class).get();
         noteFormPresenter.setObserver(this);
-        final NoteDto note = noteDao.findNoteById(noteId, "");
+        final NoteDto note = noteModel.findNoteById(noteId);
         if (note != null){
             noteFormPresenter.setNote(note);
             homeView.showEditor(noteFormPresenter.getView());
@@ -56,7 +56,7 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
 
     private List<NoteDto> getNotesSortedByDateAscNotOlder1Hour()
     {
-        return noteDao.getNotesSortedByDateAscNotOlderHour("", 1);
+        return noteModel.getNotesSortedByDateAscNotOlderHour(1);
     }
 
     @Override

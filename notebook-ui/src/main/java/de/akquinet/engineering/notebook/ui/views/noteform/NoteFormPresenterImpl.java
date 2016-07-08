@@ -1,8 +1,8 @@
 package de.akquinet.engineering.notebook.ui.views.noteform;
 
-import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-import de.akquinet.engineering.notebook.datasource.dao.NoteDao;
+import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.model.NoteModel;
 
 import javax.inject.Inject;
 
@@ -12,7 +12,7 @@ import javax.inject.Inject;
 public class NoteFormPresenterImpl implements NoteFormPresenter, NoteFormView.Observer
 {
     @Inject
-    private NoteDao noteDao;
+    private NoteModel noteModel;
 
     @Inject
     private NoteFormView noteFormView;
@@ -30,7 +30,7 @@ public class NoteFormPresenterImpl implements NoteFormPresenter, NoteFormView.Ob
     public void onSave()
     {
         final NoteDto note = noteFormView.getNote();
-        final NoteDto updatedNote = noteDao.updateNote(note, "");
+        final NoteDto updatedNote = noteModel.updateNote(note);
         noteFormView.setNote(updatedNote);
 
         if (observer != null)

@@ -9,14 +9,12 @@ import javax.persistence.Table;
 import java.util.Collection;
 import java.util.HashSet;
 
-import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_ALL_USERS;
-import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_USER_BY_ID;
 
 @Entity
 @Table(name = "cm_user")
 @NamedQueries({
-        @NamedQuery(name = FIND_ALL_USERS, query = "select user from User user order by user.login"),
-        @NamedQuery(name = FIND_USER_BY_ID, query = "select user from User user where user.id = :id")
+        @NamedQuery(name = User.FIND_ALL_USERS, query = "select user from User user order by user.login"),
+        @NamedQuery(name = User.FIND_USER_BY_ID, query = "select user from User user where user.id = :id")
 })
 public class User extends AbstractEntity {
 

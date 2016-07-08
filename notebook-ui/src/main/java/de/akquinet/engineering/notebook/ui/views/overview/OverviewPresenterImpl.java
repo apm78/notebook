@@ -1,9 +1,9 @@
 package de.akquinet.engineering.notebook.ui.views.overview;
 
 import com.vaadin.cdi.UIScoped;
-import de.akquinet.engineering.notebook.datasource.dao.NoteDao;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.model.NoteModel;
 import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
 import javax.annotation.PostConstruct;
@@ -22,7 +22,7 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     private NoteFormPresenter noteFormPresenter;
 
     @Inject
-    private NoteDao noteDao;
+    private NoteModel noteModel;
 
     @PostConstruct
     public void init(){
@@ -64,7 +64,7 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     @Override
     public void onDelete(final NoteDto note)
     {
-        noteDao.deleteNote(note, "");
+        noteModel.deleteNote(note);
 //        VaadinSession.getCurrent().getSession().
 
         resetView();
@@ -77,7 +77,7 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     }
 
     private void resetView(){
-        view.setNotes(noteDao.getNotes(""));
+        view.setNotes(noteModel.getNotes());
         view.setEditorVisible(false);
         view.selectNote(null);
     }

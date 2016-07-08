@@ -5,8 +5,11 @@ import de.akquinet.engineering.notebook.datasource.entity.Notebook;
 import de.akquinet.engineering.notebook.datasource.entity.Role;
 import de.akquinet.engineering.notebook.datasource.entity.User;
 import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.security.RunAs;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.persistence.EntityManager;
@@ -20,11 +23,12 @@ import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_ALL_U
 
 @Singleton
 @Startup
-//@RunAs("admin") // set the current role to admin to enable the execution of protected methods, does not work an AS7 :-(
+@RunAs("admin") // set the current role to admin to enable the execution of protected methods, does not work an AS7 :-(
 public class TestDataImporter
 {
 
-    // private static final Logger LOGGER = Logger.getLogger(TestDataImporter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestDataImporter.class);
+
     private static final int NR_TEST_USER = 6;
     private static final int NR_TEST_ADMIN = 4;
 
@@ -42,7 +46,7 @@ public class TestDataImporter
             final Role adminRole = new Role("admin");
             em.persist(adminRole);
 
-//            LOGGER.info("Creating new test users");
+            LOGGER.info("Creating new test users");
             for (int i = 0; i <= NR_TEST_USER; i++)
             {
                 User user = User.createUser("user" + i, "secret", "John_" + (NR_TEST_USER - i), "Doe_" + i);
@@ -62,12 +66,12 @@ public class TestDataImporter
 
                 em.persist(user);
             }
-//            LOGGER.info("Created " + (NR_TEST_USER + NR_TEST_ADMIN) + " test users.");
+            LOGGER.info("Created " + (NR_TEST_USER + NR_TEST_ADMIN) + " test users.");
             em.flush();
         }
         else
         {
-//            LOGGER.info("There are users in the database. I will not create additional ones.");
+            LOGGER.info("There are users in the database. I will not create additional ones.");
         }
     }
 
@@ -96,7 +100,7 @@ public class TestDataImporter
 
     private List<User> findAllUsers()
     {
-        // LOGGER.debug("findAllUsers()");
+        LOGGER.debug("findAllUsers()");
         return em.createNamedQuery(FIND_ALL_USERS, User.class)
                 .getResultList();
     }
