@@ -89,11 +89,7 @@ public class NotebookUI extends UI
         dataButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
 
         final Button logoutButton = new Button("Logout", FontAwesome.SIGN_OUT);
-        logoutButton.addClickListener(e -> {
-            VaadinSession.getCurrent().getSession().invalidate();
-            Page.getCurrent().setLocation(VaadinServlet.getCurrent().getServletContext().getContextPath());
-//            JaasAccessControl.logout();
-        });
+        logoutButton.addClickListener(e -> logout());
         logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
 
         navigationBody.addComponents(homeButton, dataButton, logoutButton);
@@ -101,5 +97,8 @@ public class NotebookUI extends UI
         return navigationLayout;
     }
 
-
+    private static void logout(){
+        VaadinSession.getCurrent().getSession().invalidate();
+        Page.getCurrent().setLocation(VaadinServlet.getCurrent().getServletContext().getContextPath());
+    }
 }

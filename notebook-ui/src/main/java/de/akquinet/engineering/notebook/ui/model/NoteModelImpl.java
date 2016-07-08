@@ -3,11 +3,10 @@ package de.akquinet.engineering.notebook.ui.model;
 import de.akquinet.engineering.notebook.datasource.dao.NoteDao;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 
+import javax.annotation.Resource;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -16,16 +15,18 @@ import java.util.List;
 @Stateless
 public class NoteModelImpl implements NoteModel
 {
-    @Context
-    private HttpServletRequest request;
+    @Resource
+    private SessionContext sessionContext;
 
     @Inject
     private NoteDao noteDao;
 
-    private String getUserLogin(){
-        final Principal principal = null;//request.getUserPrincipal();
-        if (principal != null){
-            return principal.getName();
+    private String getUserLogin()
+    {
+        if (sessionContext != null
+                && sessionContext.getCallerPrincipal() != null)
+        {
+            return sessionContext.getCallerPrincipal().getName();
         }
         return "";
     }

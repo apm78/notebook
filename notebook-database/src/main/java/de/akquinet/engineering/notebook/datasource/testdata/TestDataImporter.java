@@ -23,10 +23,9 @@ import static de.akquinet.engineering.notebook.datasource.entity.User.FIND_ALL_U
 
 @Singleton
 @Startup
-@RunAs("admin") // set the current role to admin to enable the execution of protected methods, does not work an AS7 :-(
+@RunAs("admin") // set the current role to admin to enable the execution of protected methods
 public class TestDataImporter
 {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDataImporter.class);
 
     private static final int NR_TEST_USER = 6;
