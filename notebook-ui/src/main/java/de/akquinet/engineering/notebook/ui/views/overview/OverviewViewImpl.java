@@ -12,6 +12,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
+import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.ClickableRenderer;
@@ -78,7 +79,7 @@ public class OverviewViewImpl implements OverviewView
         grid.getColumn(PROP_TITLE).setHeaderCaption(i18n.get("overview.table.title.header"));
         grid.getColumn(PROP_DESCRIPTION).setHeaderCaption(i18n.get("overview.table.description.header"));
         grid.getColumn(PROP_TIME).setHeaderCaption(i18n.get("overview.table.time.header"));
-        grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(),
+        grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(i18n.get("overview.table.time.format"), UI.getCurrent().getLocale()),
                                               new DateToLocalDateTimeConverter());
         grid.getColumn(PROP_DELETE).setHeaderCaption(i18n.get("overview.table.delete.header"));
         grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event ->

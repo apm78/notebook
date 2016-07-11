@@ -32,7 +32,6 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     @Override
     public void onEnter()
     {
-        // TODO handle parameter for showing table entry
         view.setObserver(this);
         resetView();
     }

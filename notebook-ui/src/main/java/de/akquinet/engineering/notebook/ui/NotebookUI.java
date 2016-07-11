@@ -113,7 +113,7 @@ public class NotebookUI extends UI
         langSelect.addValueChangeListener(e -> {
             setLocaleToSession((Locale) e.getProperty().getValue());
             // refresh UI
-            getPage().setLocation(getPage().getLocation());
+            getPage().reload();
         });
 
         final Label divider = new Label();

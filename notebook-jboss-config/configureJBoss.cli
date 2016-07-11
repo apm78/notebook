@@ -1,5 +1,7 @@
 # run with
 # jboss-cli.sh --file=configureJBoss.cli
+# or on Windows systems with
+# jboss-cli.bat --file=configureJBoss.cli
 
 connect
 

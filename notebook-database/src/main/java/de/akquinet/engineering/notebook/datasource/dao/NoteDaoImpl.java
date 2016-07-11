@@ -122,7 +122,7 @@ public class NoteDaoImpl implements NoteDao
             if (noteEntity != null)
             {
                 noteEntity.setTitle(note.getTitle());
-                noteEntity.setTitle(note.getDescription());
+                noteEntity.setDescription(note.getDescription());
                 noteEntity.setTime(DateTimeConverter.toDate(note.getTime()));
                 final Note mergedEntity = entityManager.merge(noteEntity);
                 return new NoteDto(mergedEntity);
