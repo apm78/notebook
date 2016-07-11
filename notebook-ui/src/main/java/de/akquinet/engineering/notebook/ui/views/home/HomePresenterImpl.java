@@ -8,6 +8,7 @@ import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
 
     private List<NoteDto> getNotesSortedByDateAscNotOlder1Hour()
     {
-        return noteModel.getNotesSortedByDateAscNotOlderHour(1);
+        return noteModel.getNotesSortedByDateAscNotOlderThan(LocalDateTime.now().minusHours(1));
     }
 
     @Override

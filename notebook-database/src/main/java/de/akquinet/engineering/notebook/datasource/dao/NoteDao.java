@@ -2,6 +2,7 @@ package de.akquinet.engineering.notebook.datasource.dao;
 
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface NoteDao
 
     NoteDto updateNote(NoteDto note, String userId);
 
-    List<NoteDto> getNotesSortedByDateAscNotOlderHour(String userId, long hour);
+    List<NoteDto> getNotesSortedByDateAscNotThan(String userId, LocalDateTime localDateTime);
 
     NoteDto findNoteById(long id, String userId);
 }

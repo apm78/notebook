@@ -2,6 +2,7 @@ package de.akquinet.engineering.notebook.ui.model;
 
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface NoteModel
 
     NoteDto updateNote(NoteDto note);
 
-    List<NoteDto> getNotesSortedByDateAscNotOlderHour(long hour);
+    List<NoteDto> getNotesSortedByDateAscNotOlderThan(LocalDateTime dateTime);
 
     NoteDto findNoteById(long id);
 }

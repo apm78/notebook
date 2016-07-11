@@ -14,12 +14,12 @@ import java.util.HashSet;
 @Table(name = "cm_user")
 @NamedQueries({
         @NamedQuery(name = User.FIND_ALL_USERS, query = "select user from User user order by user.login"),
-        @NamedQuery(name = User.FIND_USER_BY_ID, query = "select user from User user where user.id = :id")
+        @NamedQuery(name = User.FIND_USER_BY_LOGIN, query = "select user from User user where user.login = :login")
 })
 public class User extends AbstractEntity {
 
     public static final String FIND_ALL_USERS = "User.findAllUsers";
-    public static final String FIND_USER_BY_ID = "User.findUserById";
+    public static final String FIND_USER_BY_LOGIN = "User.findUserByLogin";
 
     @Basic
     private String login;

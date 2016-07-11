@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -56,9 +57,9 @@ public class NoteModelImpl implements NoteModel
     }
 
     @Override
-    public List<NoteDto> getNotesSortedByDateAscNotOlderHour(final long hour)
+    public List<NoteDto> getNotesSortedByDateAscNotOlderThan(final LocalDateTime dateTime)
     {
-        return noteDao.getNotesSortedByDateAscNotOlderHour(getUserLogin(), hour);
+        return noteDao.getNotesSortedByDateAscNotThan(getUserLogin(), dateTime);
     }
 
     @Override
