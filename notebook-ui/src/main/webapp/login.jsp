@@ -26,7 +26,7 @@
                         <% if ("true".equals(request.getParameter("login-error")))
                         { %>
                         <div class="alert alert-danger text-center">
-                            Wrong password or user name.
+                            Wrong password or user name!
                         </div>
                         <% } %>
 
