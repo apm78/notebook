@@ -20,7 +20,7 @@ public class Role extends AbstractEntity {
     private String name;
 
     @ManyToMany
-    private Collection<User> users = new HashSet<User>();
+    private Collection<User> users = new HashSet<>();
 
     public Role() {
     }
