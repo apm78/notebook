@@ -36,21 +36,7 @@ public class MessageBundles
     }
 
     public String get(final Locale locale, final String key, final Object... params){
-        return get(locale, true, key, params);
-    }
-
-    public String get(final Locale locale, final boolean formatParams, final String key, final Object... params){
         final MessageFormat messageFormat = new MessageFormat(get(locale, key), locale);
-        if (!formatParams && params != null)
-        {
-            final Object[] stringParams = new String[params.length];
-            for (int i = 0; i < params.length; i++)
-            {
-                final Object param = params[i];
-                stringParams[i] = String.valueOf(param);
-            }
-            return messageFormat.format(stringParams);
-        }
         return messageFormat.format(params);
     }
 }
