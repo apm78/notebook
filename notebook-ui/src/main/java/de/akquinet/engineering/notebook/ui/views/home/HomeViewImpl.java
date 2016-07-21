@@ -38,7 +38,8 @@ public class HomeViewImpl implements HomeView
     }
 
     @PostConstruct
-    public void init(){
+    public void init()
+    {
         rootLayout.setMargin(true);
         final Label header = new Label("Home");
         header.addStyleName(ValoTheme.LABEL_H2);
@@ -71,15 +72,17 @@ public class HomeViewImpl implements HomeView
                 UI.getCurrent().getLocale());
 
         noteLayout.removeAllComponents();
-        for (final NoteDto note : notes){
+        for (final NoteDto note : notes)
+        {
             final Panel panel = new Panel(note.getTitle());
             final VerticalLayout layout = new VerticalLayout();
             layout.setMargin(true);
             layout.setSpacing(true);
             final Label timeLabel = new Label(
-                    new MessageFormat("{0} on {1}", Locale.US).format(
+                    new MessageFormat("{0} on {1}", Locale.US)
+                            .format(new Object[]{
                             note.getTime().format(timeFormatter),
-                            note.getTime().format(dateFormatter)));
+                            note.getTime().format(dateFormatter)}));
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
