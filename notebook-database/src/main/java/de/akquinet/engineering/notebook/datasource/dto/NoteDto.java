@@ -4,7 +4,6 @@ import de.akquinet.engineering.notebook.datasource.entity.Note;
 import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 
 /**
@@ -13,7 +12,7 @@ import java.util.Date;
 public class NoteDto
 {
     private Long id;
-    
+
     private String title;
 
     private String description;
@@ -25,8 +24,8 @@ public class NoteDto
 
     }
 
-    public NoteDto(final Long id, final String title,
-                   final String description, final LocalDateTime time)
+    private NoteDto(final Long id, final String title,
+                    final String description, final LocalDateTime time)
     {
         this.id = id;
         this.title = title;
@@ -39,8 +38,8 @@ public class NoteDto
         this(note.getId(), note.getTitle(), note.getDescription(), note.getTime());
     }
 
-    public NoteDto(final Long id, final String title,
-                   final String description, final Date time)
+    private NoteDto(final Long id, final String title,
+                    final String description, final Date time)
     {
         this(id, title, description, DateTimeConverter.toLocalDateTime(time));
     }
@@ -94,5 +93,45 @@ public class NoteDto
                 ", description='" + description + '\'' +
                 ", time=" + time +
                 '}';
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        final NoteDto noteDto = (NoteDto) o;
+
+        if (id != null ? !id.equals(noteDto.id) : noteDto.id != null)
+        {
+            return false;
+        }
+        if (title != null ? !title.equals(noteDto.title) : noteDto.title != null)
+        {
+            return false;
+        }
+        if (description != null ? !description.equals(noteDto.description) : noteDto.description != null)
+        {
+            return false;
+        }
+        return time != null ? time.equals(noteDto.time) : noteDto.time == null;
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (time != null ? time.hashCode() : 0);
+        return result;
     }
 }
