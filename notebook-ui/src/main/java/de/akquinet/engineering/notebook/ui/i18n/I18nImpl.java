@@ -35,12 +35,6 @@ public class I18nImpl implements I18n
     @Override
     public String get(final String key, final Object... params)
     {
-        return bundles.get(getCurrentLocale(), true, key, params);
-    }
-
-    @Override
-    public String get(final boolean formatParams, final String key, final Object... params)
-    {
         return bundles.get(getCurrentLocale(), key, params);
     }
 }
