@@ -7,7 +7,6 @@ import com.vaadin.cdi.access.JaasAccessControl;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -139,7 +138,6 @@ public class NotebookUI extends UI
     }
 
     private static void logout(){
-        VaadinSession.getCurrent().getSession().invalidate();
-        Page.getCurrent().reload();
+        // TODO
     }
 }
