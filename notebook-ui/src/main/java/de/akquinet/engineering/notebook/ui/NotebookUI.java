@@ -20,7 +20,6 @@ import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.themes.ValoTheme;
-import de.akquinet.engineering.notebook.ui.i18n.I18n;
 import de.akquinet.engineering.notebook.ui.views.home.HomeViewNavigation;
 import de.akquinet.engineering.notebook.ui.views.overview.OverviewViewNavigation;
 
@@ -39,9 +38,6 @@ public class NotebookUI extends UI
 
     @Inject
     private CDIViewProvider viewProvider;
-
-    @Inject
-    private I18n i18n;
 
     @Override
     protected void init(VaadinRequest vaadinRequest)
@@ -84,7 +80,7 @@ public class NotebookUI extends UI
         navigationBody.addStyleName(ValoTheme.MENU_PART);
         final CssLayout navigationTitle = new CssLayout();
         navigationTitle.addStyleName(ValoTheme.MENU_TITLE);
-        final Label title = new Label(i18n.get("application.name"));
+        final Label title = new Label("Notebook");
         navigationTitle.addComponent(title);
         navigationBody.addComponent(navigationTitle);
 
@@ -100,7 +96,32 @@ public class NotebookUI extends UI
         userInfo.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         userInfo.setValue(userName);
 
-        final NativeSelect langSelect = new NativeSelect();
+        final Label divider = new Label();
+        divider.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
+        userLayout.addComponents(userInfo, divider);
+        navigationBody.addComponent(userLayout);
+
+        navigationBody.addStyleName(ValoTheme.MENU_PART);
+        final Button homeButton = new Button("Home", FontAwesome.HOME);
+        homeButton.addClickListener(e -> getNavigator().navigateTo(HomeViewNavigation.VIEW_NAME));
+        homeButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        final Button dataButton = new Button("Overview", FontAwesome.TABLE);
+        dataButton.addClickListener(e -> getNavigator().navigateTo(OverviewViewNavigation.VIEW_NAME));
+        dataButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+
+        final Button logoutButton = new Button("Logout", FontAwesome.SIGN_OUT);
+        logoutButton.addClickListener(e -> logout());
+        logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+
+        navigationBody.addComponents(homeButton, dataButton, logoutButton);
+        navigationLayout.addComponents(navigationBody);
+        return navigationLayout;
+    }
+
+    private NativeSelect createLanguageSelect()
+    {
+        final NativeSelect langSelect;
+        langSelect = new NativeSelect();
         langSelect.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         langSelect.setNullSelectionAllowed(false);
         langSelect.setContainerDataSource(new BeanItemContainer<>(Locale.class, Arrays.asList(Locale.US, Locale.GERMANY)));
@@ -114,27 +135,7 @@ public class NotebookUI extends UI
             // refresh UI
             getPage().reload();
         });
-
-        final Label divider = new Label();
-        divider.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
-        userLayout.addComponents(userInfo, langSelect, divider);
-        navigationBody.addComponent(userLayout);
-
-        navigationBody.addStyleName(ValoTheme.MENU_PART);
-        final Button homeButton = new Button(i18n.get("menu.home"), FontAwesome.HOME);
-        homeButton.addClickListener(e -> getNavigator().navigateTo(HomeViewNavigation.VIEW_NAME));
-        homeButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-        final Button dataButton = new Button(i18n.get("menu.overview"), FontAwesome.TABLE);
-        dataButton.addClickListener(e -> getNavigator().navigateTo(OverviewViewNavigation.VIEW_NAME));
-        dataButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-
-        final Button logoutButton = new Button(i18n.get("menu.logout"), FontAwesome.SIGN_OUT);
-        logoutButton.addClickListener(e -> logout());
-        logoutButton.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-
-        navigationBody.addComponents(homeButton, dataButton, logoutButton);
-        navigationLayout.addComponents(navigationBody);
-        return navigationLayout;
+        return langSelect;
     }
 
     private static void logout(){

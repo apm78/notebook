@@ -20,12 +20,10 @@ import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
-import de.akquinet.engineering.notebook.ui.i18n.I18n;
 import de.akquinet.engineering.notebook.ui.views.vaadin.ConfirmationDialog;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 
@@ -40,9 +38,6 @@ public class OverviewViewImpl implements OverviewView
     private final static String PROP_DESCRIPTION = "description";
     private final static String PROP_TIME = "time";
     private final static String PROP_DELETE = "delete";
-
-    @Inject
-    private I18n i18n;
 
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final BeanItemContainer<NoteDto> container = new BeanItemContainer<>(NoteDto.class);
@@ -71,25 +66,25 @@ public class OverviewViewImpl implements OverviewView
             @Override
             public String getValue(final Item item, final Object itemId, final Object propertyId)
             {
-                return i18n.get("overview.table.delete.button");
+                return "Delete";
             }
         });
         grid.removeColumn(PROP_ID);
         grid.getDefaultHeaderRow().getCell(PROP_TITLE).setStyleName(ValoTheme.LABEL_BOLD);
-        grid.getColumn(PROP_TITLE).setHeaderCaption(i18n.get("overview.table.title.header"));
-        grid.getColumn(PROP_DESCRIPTION).setHeaderCaption(i18n.get("overview.table.description.header"));
-        grid.getColumn(PROP_TIME).setHeaderCaption(i18n.get("overview.table.time.header"));
-        grid.getColumn(PROP_TIME).setRenderer(new DateRenderer(i18n.get("overview.table.time.format"), UI.getCurrent().getLocale()),
+        grid.getColumn(PROP_TITLE).setHeaderCaption("Title");
+        grid.getColumn(PROP_DESCRIPTION).setHeaderCaption("Description");
+        grid.getColumn(PROP_TIME).setHeaderCaption("Time");
+        grid.getColumn(PROP_TIME).setRenderer(new DateRenderer("%1$tl:%1$tM %1$tp %1$tB %1$te %1$tY", UI.getCurrent().getLocale()),
                                               new DateToLocalDateTimeConverter());
-        grid.getColumn(PROP_DELETE).setHeaderCaption(i18n.get("overview.table.delete.header"));
+        grid.getColumn(PROP_DELETE).setHeaderCaption("Delete");
         grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event ->
         {
             final NoteDto selectedNote = (NoteDto) event.getItemId();
             if (selectedNote != null)
             {
                 final ConfirmationDialog confirmDlg = new ConfirmationDialog();
-                confirmDlg.getWindow().setCaption(i18n.get("dialog.delete.note.caption"));
-                confirmDlg.getDescription().setValue(i18n.get("dialog.delete.note.description"));
+                confirmDlg.getWindow().setCaption("Delete Note");
+                confirmDlg.getDescription().setValue("Do you really want to delete this note?");
                 confirmDlg.getOkButton().addClickListener(e ->
                 {
                     if (observer != null)
@@ -97,8 +92,8 @@ public class OverviewViewImpl implements OverviewView
                         observer.onDelete(selectedNote);
                     }
                 });
-                confirmDlg.getOkButton().setCaption(i18n.get("dialog.confirmButton.caption"));
-                confirmDlg.getCancelButton().setCaption(i18n.get("form.buttonCancel.caption"));
+                confirmDlg.getOkButton().setCaption("Confirm");
+                confirmDlg.getCancelButton().setCaption("Cancel");
                 confirmDlg.show();
             }
         }));
@@ -126,7 +121,7 @@ public class OverviewViewImpl implements OverviewView
             }
         });
         final Grid.FooterRow footer = grid.appendFooterRow();
-        final Button addButton = new Button(i18n.get("overview.addNotesButton.caption"));
+        final Button addButton = new Button("Add Notes");
         addButton.addClickListener((Button.ClickListener) event ->
         {
             if (observer != null)
@@ -136,7 +131,7 @@ public class OverviewViewImpl implements OverviewView
         });
         footer.getCell(PROP_DELETE).setComponent(addButton);
 
-        final Label header = new Label(i18n.get("overview.title"));
+        final Label header = new Label("All Notes");
         header.addStyleName(ValoTheme.LABEL_H2);
         rootLayout.setMargin(true);
         rootLayout.setSpacing(true);

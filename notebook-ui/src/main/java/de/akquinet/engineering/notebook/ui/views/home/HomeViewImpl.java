@@ -12,12 +12,12 @@ import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
-import de.akquinet.engineering.notebook.ui.i18n.I18n;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import java.text.MessageFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -25,9 +25,6 @@ import java.util.Collection;
 @UIScoped
 public class HomeViewImpl implements HomeView
 {
-    @Inject
-    private I18n i18n;
-
     private final VerticalLayout rootLayout = new VerticalLayout();
 
     private final VerticalLayout noteLayout = new VerticalLayout();
@@ -43,7 +40,7 @@ public class HomeViewImpl implements HomeView
     @PostConstruct
     public void init(){
         rootLayout.setMargin(true);
-        final Label header = new Label(i18n.get("home.title"));
+        final Label header = new Label("Home");
         header.addStyleName(ValoTheme.LABEL_H2);
         rootLayout.addComponent(header);
 
@@ -68,9 +65,9 @@ public class HomeViewImpl implements HomeView
     @Override
     public void setNotes(final Collection<NoteDto> notes)
     {
-        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(i18n.get("home.timePattern"),
+        final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm",
                 UI.getCurrent().getLocale());
-        final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(i18n.get("home.datePattern"),
+        final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MMMM d yyyy",
                 UI.getCurrent().getLocale());
 
         noteLayout.removeAllComponents();
@@ -80,13 +77,13 @@ public class HomeViewImpl implements HomeView
             layout.setMargin(true);
             layout.setSpacing(true);
             final Label timeLabel = new Label(
-                    i18n.get("home.timeOnDate",
+                    new MessageFormat("{0} on {1}", Locale.US).format(
                             note.getTime().format(timeFormatter),
                             note.getTime().format(dateFormatter)));
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
-            layout.addComponent(new Button(i18n.get("home.editButton.caption"), e -> {
+            layout.addComponent(new Button("Edit", e -> {
                 if (observer != null)
                 {
                     observer.onEdit(note.getId());

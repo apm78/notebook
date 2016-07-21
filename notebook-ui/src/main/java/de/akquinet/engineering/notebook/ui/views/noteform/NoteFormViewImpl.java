@@ -15,12 +15,10 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-import de.akquinet.engineering.notebook.ui.i18n.I18n;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 import de.akquinet.engineering.notebook.ui.views.vaadin.LazyValidationFieldGroup;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -30,9 +28,6 @@ public class NoteFormViewImpl implements NoteFormView
     private static final String PROP_TITLE = "title";
     private static final String PROP_DESCRIPTION = "description";
     private static final String PROP_TIME = "time";
-
-    @Inject
-    private I18n i18n;
 
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final FieldGroup fieldGroup = new LazyValidationFieldGroup();
@@ -49,21 +44,21 @@ public class NoteFormViewImpl implements NoteFormView
         final FormLayout formLayout = new FormLayout();
         formLayout.setWidth("100%");
 
-        final TextField titleField = new TextField(i18n.get("note.form.title"));
+        final TextField titleField = new TextField("Title");
         titleField.setWidth("100%");
         titleField.setNullRepresentation("");
         titleField.setRequired(true);
-        titleField.setRequiredError(i18n.get("note.form.title.requiredError"));
-        final TextArea descriptionField = new TextArea(i18n.get("note.form.description"));
+        titleField.setRequiredError("Title of note is mandatory.");
+        final TextArea descriptionField = new TextArea("Description");
         descriptionField.setNullRepresentation("");
         descriptionField.setWidth("100%");
         descriptionField.setRows(6);
-        final DateField dateField = new DateField(i18n.get("note.form.date"));
+        final DateField dateField = new DateField("Date");
         dateField.setWidth("100%");
         dateField.setResolution(Resolution.MINUTE);
         dateField.setConverter(new DateToLocalDateTimeConverter());
         dateField.setRequired(true);
-        dateField.setRequiredError(i18n.get("note.form.description.requiredError"));
+        dateField.setRequiredError("Date of note is mandatory.");
 
         fieldGroup.bind(titleField, PROP_TITLE);
         fieldGroup.bind(descriptionField, PROP_DESCRIPTION);
@@ -73,7 +68,7 @@ public class NoteFormViewImpl implements NoteFormView
         final HorizontalLayout buttonLayout = new HorizontalLayout();
         buttonLayout.setSizeFull();
         buttonLayout.setSpacing(true);
-        final Button cancelButton = new Button(i18n.get("form.buttonCancel.caption"),
+        final Button cancelButton = new Button("Cancel",
                 e ->
                 {
                     if (observer != null)
@@ -83,7 +78,7 @@ public class NoteFormViewImpl implements NoteFormView
                     }
                 });
 
-        final Button saveButton = new Button(i18n.get("form.buttonSave.caption"),
+        final Button saveButton = new Button("Save",
                 event ->
                 {
                     if (observer != null)
@@ -95,7 +90,7 @@ public class NoteFormViewImpl implements NoteFormView
                         }
                         catch (FieldGroup.CommitException e)
                         {
-                            Notification.show(i18n.get("note.form.saveError"), Notification.Type.WARNING_MESSAGE);
+                            Notification.show("Note couldn't be saved!", Notification.Type.WARNING_MESSAGE);
                             e.printStackTrace();
                         }
                     }
@@ -130,7 +125,7 @@ public class NoteFormViewImpl implements NoteFormView
     public void setNote(final NoteDto note)
     {
         fieldGroup.setItemDataSource(new BeanItem<>(note, NoteDto.class));
-        title.setValue(i18n.get(note.getId() == null ? "note.form.newNote" : "note.form.editNote"));
+        title.setValue(note.getId() == null ? "New Note" : "Edit Note");
     }
 
     @Override
