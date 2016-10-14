@@ -72,21 +72,27 @@ public class NoteModelImpl implements NoteModel, Serializable
     @Override
     public void deleteNote(final NoteDto note)
     {
-        noteList.remove(note);
-    }
-
-    @Override
-    public NoteDto updateNote(final NoteDto note)
-    {
         if (note.getId() != null)
         {
             final NoteDto noteDto = findNoteById(note.getId());
             if (noteDto != null)
             {
-                deleteNote(noteDto);
+                noteList.remove(noteDto);
             }
         }
-        addNote(note);
+    }
+
+    @Override
+    public NoteDto updateNote(final NoteDto note)
+    {
+        if (note.getId() != null){
+            deleteNote(note);
+            noteList.add(note);
+        }
+        else
+        {
+            addNote(note);
+        }
         return note;
     }
 

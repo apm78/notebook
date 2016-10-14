@@ -4,5 +4,4 @@
 
 <jboss-web>
     <context-root>/notebook</context-root>
-    <security-domain>Notebook</security-domain>
 </jboss-web>

@@ -33,11 +33,11 @@ import java.util.Set;
 @UIScoped
 public class OverviewViewImpl implements OverviewView
 {
-    private final static String PROP_ID = "id";
-    private final static String PROP_TITLE = "title";
-    private final static String PROP_DESCRIPTION = "description";
-    private final static String PROP_TIME = "time";
-    private final static String PROP_DELETE = "delete";
+    private static final String PROP_ID = "id";
+    private static final String PROP_TITLE = "title";
+    private static final String PROP_DESCRIPTION = "description";
+    private static final String PROP_TIME = "time";
+    private static final String PROP_DELETE = "delete";
 
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final BeanItemContainer<NoteDto> container = new BeanItemContainer<>(NoteDto.class);

@@ -81,8 +81,8 @@ public class HomeViewImpl implements HomeView
             final Label timeLabel = new Label(
                     new MessageFormat("{0} on {1}", Locale.US)
                             .format(new Object[]{
-                                    note.getTime().format(timeFormatter),
-                                    note.getTime().format(dateFormatter)}));
+                            note.getTime().format(timeFormatter),
+                            note.getTime().format(dateFormatter)}));
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
