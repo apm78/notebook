@@ -68,11 +68,13 @@ public class NotebookUI extends UI
         }
     }
 
-    private void setLocaleToSession(final Locale locale){
+    private void setLocaleToSession(final Locale locale)
+    {
         VaadinSession.getCurrent().getSession().setAttribute(SESSION_LOCALE, locale);
     }
 
-    private Component createNavigation(){
+    private Component createNavigation()
+    {
         final CssLayout navigationLayout = new CssLayout();
         navigationLayout.setPrimaryStyleName(ValoTheme.MENU_ROOT);
         final CssLayout navigationBody = new CssLayout();
@@ -89,16 +91,7 @@ public class NotebookUI extends UI
         navigationBody.addComponent(logo);
 
         // display user info
-        final CssLayout userLayout = new CssLayout();
-        final String userName = JaasAccessControl.getCurrentRequest().getUserPrincipal().getName();
-        final Label userInfo = new Label();
-        userInfo.setPrimaryStyleName(ValoTheme.MENU_ITEM);
-        userInfo.setValue(userName);
-
-        final Label divider = new Label();
-        divider.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
-        userLayout.addComponents(userInfo, divider);
-        navigationBody.addComponent(userLayout);
+        // TODO
 
         navigationBody.addStyleName(ValoTheme.MENU_PART);
         final Button homeButton = new Button("Home", FontAwesome.HOME);
@@ -117,6 +110,20 @@ public class NotebookUI extends UI
         return navigationLayout;
     }
 
+    private void displayUserInfo(final CssLayout navigationBody)
+    {
+        final CssLayout userLayout = new CssLayout();
+        final String userName = JaasAccessControl.getCurrentRequest().getUserPrincipal().getName();
+        final Label userInfo = new Label();
+        userInfo.setPrimaryStyleName(ValoTheme.MENU_ITEM);
+        userInfo.setValue(userName);
+
+        final Label divider = new Label();
+        divider.setPrimaryStyleName(ValoTheme.MENU_SUBTITLE);
+        userLayout.addComponents(userInfo, divider);
+        navigationBody.addComponent(userLayout);
+    }
+
     private NativeSelect createLanguageSelect()
     {
         final NativeSelect langSelect;
@@ -124,12 +131,14 @@ public class NotebookUI extends UI
         langSelect.setPrimaryStyleName(ValoTheme.MENU_ITEM);
         langSelect.setNullSelectionAllowed(false);
         langSelect.setContainerDataSource(new BeanItemContainer<>(Locale.class, Arrays.asList(Locale.US, Locale.GERMANY)));
-        for (final Object itemId : langSelect.getContainerDataSource().getItemIds()){
+        for (final Object itemId : langSelect.getContainerDataSource().getItemIds())
+        {
             final Locale locale = (Locale) itemId;
             langSelect.setItemCaption(itemId, locale.getDisplayLanguage(locale));
         }
         langSelect.setValue(Locale.GERMANY.equals(getLocale()) ? getLocale() : Locale.US);
-        langSelect.addValueChangeListener(e -> {
+        langSelect.addValueChangeListener(e ->
+        {
             setLocaleToSession((Locale) e.getProperty().getValue());
             // refresh UI
             getPage().reload();
@@ -137,7 +146,8 @@ public class NotebookUI extends UI
         return langSelect;
     }
 
-    private static void logout(){
+    private static void logout()
+    {
         // TODO
     }
 }

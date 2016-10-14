@@ -46,18 +46,18 @@ public class TestDataImporter
             em.persist(adminRole);
 
             LOGGER.info("Creating new test users");
+
+            // create anonymous user
+            persistUser(User.createUser("anonymous", "secret", "John", "Doe"), userRole);
+
             for (int i = 0; i <= NR_TEST_USER; i++)
             {
-                User user = User.createUser("user" + i, "secret", "John_" + (NR_TEST_USER - i), "Doe_" + i);
-                user.addRole(userRole);
-
-                createAndPersistNotebookWithNotes(user);
-
-                em.persist(user);
+                final User user = User.createUser("user" + i, "secret", "John_" + (NR_TEST_USER - i), "Doe_" + i);
+                persistUser(user, userRole);
             }
             for (int i = 0; i <= NR_TEST_ADMIN; i++)
             {
-                User user = User.createUser("admin" + i, "secret", "Adam_" + (NR_TEST_ADMIN - i), "Administrator_" + i);
+                final User user = User.createUser("admin" + i, "secret", "Adam_" + (NR_TEST_ADMIN - i), "Administrator_" + i);
                 user.addRole(adminRole);
                 user.addRole(userRole);
 
@@ -72,6 +72,12 @@ public class TestDataImporter
         {
             LOGGER.info("There are users in the database. I will not create additional ones.");
         }
+    }
+
+    private void persistUser(final User user, final Role userRole){
+        user.addRole(userRole);
+        createAndPersistNotebookWithNotes(user);
+        em.persist(user);
     }
 
     private void createAndPersistNotebookWithNotes(final User user)
