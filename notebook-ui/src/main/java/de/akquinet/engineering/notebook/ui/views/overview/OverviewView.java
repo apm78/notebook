@@ -16,9 +16,9 @@ public interface OverviewView extends View
 
     void setNotes(Collection<NoteDto> notes);
 
-    void setEditorView(de.akquinet.engineering.notebook.ui.View view);
+    void showEditor(final NoteDto note);
 
-    void setEditorVisible(boolean visible);
+    NoteDto getNote();
 
     interface Observer {
         void onSelect(NoteDto selectedNote);
@@ -26,5 +26,7 @@ public interface OverviewView extends View
         void onAdd();
 
         void onDelete(NoteDto note);
+
+        void onSave();
     }
 }

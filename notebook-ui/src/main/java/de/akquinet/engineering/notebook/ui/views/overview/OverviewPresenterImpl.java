@@ -4,30 +4,20 @@ import com.vaadin.cdi.UIScoped;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.ui.model.NoteModel;
-import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
  */
 @UIScoped
-public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Observer, NoteFormPresenter.Observer
+public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Observer
 {
     @Inject
     private OverviewView view;
 
     @Inject
-    private NoteFormPresenter noteFormPresenter;
-
-    @Inject
     private NoteModel noteModel;
-
-    @PostConstruct
-    public void init(){
-        noteFormPresenter.setObserver(this);
-    }
 
     @Override
     public void onEnter()
@@ -45,12 +35,10 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
     private void showNote(final NoteDto note){
         if (note != null)
         {
-            noteFormPresenter.setNote(note);
-            view.setEditorView(noteFormPresenter.getView());
-            view.setEditorVisible(true);
+            view.showEditor(note);
         }
         else{
-            view.setEditorVisible(false);
+            view.showEditor(null);
         }
     }
 
@@ -76,19 +64,16 @@ public class OverviewPresenterImpl implements OverviewPresenter, OverviewView.Ob
 
     private void resetView(){
         view.setNotes(noteModel.getNotes());
-        view.setEditorVisible(false);
+        view.showEditor(null);
         view.selectNote(null);
     }
 
     @Override
     public void onSave()
     {
+        final NoteDto note = view.getNote();
+        noteModel.updateNote(note);
+
         resetView();
-    }
-
-    @Override
-    public void onCancel()
-    {
-
     }
 }

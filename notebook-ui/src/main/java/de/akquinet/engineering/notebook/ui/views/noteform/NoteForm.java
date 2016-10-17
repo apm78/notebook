@@ -5,6 +5,7 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
 import com.vaadin.ui.DateField;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -18,13 +19,18 @@ import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 import de.akquinet.engineering.notebook.ui.views.vaadin.LazyValidationFieldGroup;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @author Axel Meier, akquinet engineering GmbH
  */
-public class NoteFormViewImpl implements NoteFormView
+public class NoteForm
 {
+    public interface Observer
+    {
+        void onSave();
+
+        void onCancel();
+    }
+
     private static final String PROP_TITLE = "title";
     private static final String PROP_DESCRIPTION = "description";
     private static final String PROP_TIME = "time";
@@ -34,13 +40,13 @@ public class NoteFormViewImpl implements NoteFormView
     private Observer observer;
     private final Label title = new Label();
 
-    public NoteFormViewImpl()
+    public NoteForm()
     {
-
+        init();
     }
 
-    @PostConstruct
-    public void init(){
+    private void init()
+    {
         final FormLayout formLayout = new FormLayout();
         formLayout.setWidth("100%");
 
@@ -109,30 +115,25 @@ public class NoteFormViewImpl implements NoteFormView
         rootLayout.addComponent(buttonLayout);
     }
 
-    @Override
-    public <C> C getComponent(final Class<C> type)
-    {
-        return type.cast(rootLayout);
-    }
-
-    @Override
-    public void setObserver(final Observer observer)
-    {
-        this.observer = observer;
-    }
-
-    @Override
     public void setNote(final NoteDto note)
     {
         fieldGroup.setItemDataSource(new BeanItem<>(note, NoteDto.class));
         title.setValue(note.getId() == null ? "New Note" : "Edit Note");
     }
 
-    @Override
+    public Component getRootLayout(){
+        return rootLayout;
+    }
+
     public NoteDto getNote()
     {
         @SuppressWarnings("unchecked")
         final BeanItem<NoteDto> beanItem = (BeanItem<NoteDto>) fieldGroup.getItemDataSource();
         return beanItem.getBean();
+    }
+
+    public void setObserver(final Observer observer)
+    {
+        this.observer = observer;
     }
 }

@@ -4,9 +4,7 @@ import com.vaadin.cdi.UIScoped;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.ui.model.NoteModel;
-import de.akquinet.engineering.notebook.ui.views.noteform.NoteFormPresenter;
 
-import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +13,7 @@ import java.util.List;
  * @author Axel Meier, akquinet engineering GmbH
  */
 @UIScoped
-public class HomePresenterImpl implements HomePresenter, HomeView.Observer, NoteFormPresenter.Observer
+public class HomePresenterImpl implements HomePresenter, HomeView.Observer
 {
     @Inject
     private HomeView homeView;
@@ -39,18 +37,19 @@ public class HomePresenterImpl implements HomePresenter, HomeView.Observer, Note
     @Override
     public void onEdit(final long noteId)
     {
-        final NoteFormPresenter noteFormPresenter = CDI.current().select(NoteFormPresenter.class).get();
-        noteFormPresenter.setObserver(this);
         final NoteDto note = noteModel.findNoteById(noteId);
         if (note != null){
-            noteFormPresenter.setNote(note);
-            homeView.showEditor(noteFormPresenter.getView());
+
+            homeView.showEditor(note);
         }
     }
 
     @Override
     public void onSave()
     {
+        final NoteDto note = homeView.getNote();
+        noteModel.updateNote(note);
+
         homeView.closeEditor();
         homeView.setNotes(getNotesSortedByDateAscNotOlder1Hour());
     }

@@ -12,7 +12,7 @@ import javax.inject.Inject;
 @CDIView(OverviewViewNavigation.VIEW_NAME)
 public class OverviewViewNavigation implements View, de.akquinet.engineering.notebook.ui.View
 {
-    public final static String VIEW_NAME = "overview";
+    public static final String VIEW_NAME = "overview";
 
     @Inject
     private OverviewPresenter presenter;

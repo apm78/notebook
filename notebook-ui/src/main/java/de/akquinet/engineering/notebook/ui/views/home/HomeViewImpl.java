@@ -3,7 +3,6 @@ package de.akquinet.engineering.notebook.ui.views.home;
 import com.vaadin.cdi.UIScoped;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
@@ -11,7 +10,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.views.noteform.NoteForm;
 
 import javax.annotation.PostConstruct;
 import java.text.MessageFormat;
@@ -32,6 +31,8 @@ public class HomeViewImpl implements HomeView
     private Observer observer;
 
     private Window editorWindow;
+
+    private final NoteForm noteForm = new NoteForm();
 
     public HomeViewImpl()
     {
@@ -81,12 +82,13 @@ public class HomeViewImpl implements HomeView
             final Label timeLabel = new Label(
                     new MessageFormat("{0} on {1}", Locale.US)
                             .format(new Object[]{
-                            note.getTime().format(timeFormatter),
-                            note.getTime().format(dateFormatter)}));
+                                    note.getTime().format(timeFormatter),
+                                    note.getTime().format(dateFormatter)}));
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
-            layout.addComponent(new Button("Edit", e -> {
+            layout.addComponent(new Button("Edit", e ->
+            {
                 if (observer != null)
                 {
                     observer.onEdit(note.getId());
@@ -107,8 +109,30 @@ public class HomeViewImpl implements HomeView
     }
 
     @Override
-    public void showEditor(final View editView)
+    public void showEditor(final NoteDto note)
     {
+        noteForm.setObserver(new NoteForm.Observer()
+        {
+            @Override
+            public void onSave()
+            {
+                if (observer != null)
+                {
+                    observer.onSave();
+                }
+            }
+
+            @Override
+            public void onCancel()
+            {
+                if (observer != null)
+                {
+                    observer.onCancel();
+                }
+            }
+        });
+        noteForm.setNote(note);
+
         closeEditorWindow();
         editorWindow = new Window();
         editorWindow.center();
@@ -117,10 +141,16 @@ public class HomeViewImpl implements HomeView
         editorWindow.setClosable(true);
         final VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setMargin(true);
-        verticalLayout.addComponent(editView.getComponent(Component.class));
+        verticalLayout.addComponent(noteForm.getRootLayout());
         editorWindow.setContent(verticalLayout);
         editorWindow.addCloseListener(e -> editorWindow = null);
         rootLayout.getUI().addWindow(editorWindow);
+    }
+
+    @Override
+    public NoteDto getNote()
+    {
+        return noteForm.getNote();
     }
 
     @Override

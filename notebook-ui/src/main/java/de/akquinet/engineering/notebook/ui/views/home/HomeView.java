@@ -14,12 +14,18 @@ public interface HomeView extends View
 
     void setNotes(Collection<NoteDto> notes);
 
-    void showEditor(View editView);
+    void showEditor(final NoteDto note);
 
     void closeEditor();
 
+    NoteDto getNote();
+
     interface Observer
     {
+        void onSave();
+
+        void onCancel();
+
         void onEdit(long noteId);
     }
 }

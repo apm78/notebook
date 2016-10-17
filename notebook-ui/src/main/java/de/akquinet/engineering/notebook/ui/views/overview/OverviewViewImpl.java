@@ -8,7 +8,6 @@ import com.vaadin.data.util.PropertyValueGenerator;
 import com.vaadin.event.SelectionEvent;
 import com.vaadin.shared.ui.grid.HeightMode;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
@@ -19,7 +18,7 @@ import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-import de.akquinet.engineering.notebook.ui.View;
+import de.akquinet.engineering.notebook.ui.views.noteform.NoteForm;
 import de.akquinet.engineering.notebook.ui.views.vaadin.ConfirmationDialog;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 
@@ -44,6 +43,7 @@ public class OverviewViewImpl implements OverviewView
     private final Panel editorPanel = new Panel();
     private Observer observer;
     private final Grid grid = new Grid();
+    private final NoteForm noteForm = new NoteForm();
 
     public OverviewViewImpl()
     {
@@ -75,7 +75,7 @@ public class OverviewViewImpl implements OverviewView
         grid.getColumn(PROP_DESCRIPTION).setHeaderCaption("Description");
         grid.getColumn(PROP_TIME).setHeaderCaption("Time");
         grid.getColumn(PROP_TIME).setRenderer(new DateRenderer("%1$tl:%1$tM %1$tp %1$tB %1$te %1$tY", UI.getCurrent().getLocale()),
-                                              new DateToLocalDateTimeConverter());
+                new DateToLocalDateTimeConverter());
         grid.getColumn(PROP_DELETE).setHeaderCaption("Delete");
         grid.getColumn(PROP_DELETE).setRenderer(new ButtonRenderer((ClickableRenderer.RendererClickListener) event ->
         {
@@ -155,18 +155,43 @@ public class OverviewViewImpl implements OverviewView
     }
 
     @Override
-    public void setEditorView(final View view)
+    public void showEditor(final NoteDto note)
     {
-        final VerticalLayout frame = new VerticalLayout();
-        frame.setMargin(true);
-        frame.addComponent(view.getComponent(Component.class));
-        editorPanel.setContent(frame);
+        if (note != null)
+        {
+            noteForm.setNote(note);
+            noteForm.setObserver(new NoteForm.Observer()
+            {
+                @Override
+                public void onSave()
+                {
+                    if (observer != null)
+                    {
+                        observer.onSave();
+                    }
+                }
+
+                @Override
+                public void onCancel()
+                {
+                }
+            });
+            final VerticalLayout frame = new VerticalLayout();
+            frame.setMargin(true);
+            frame.addComponent(noteForm.getRootLayout());
+            editorPanel.setContent(frame);
+            editorPanel.setVisible(true);
+        }
+        else
+        {
+            editorPanel.setVisible(false);
+        }
     }
 
     @Override
-    public void setEditorVisible(final boolean visible)
+    public NoteDto getNote()
     {
-        editorPanel.setVisible(visible);
+        return noteForm.getNote();
     }
 
     @Override
@@ -180,6 +205,6 @@ public class OverviewViewImpl implements OverviewView
     {
         container.removeAllItems();
         container.addAll(notes);
-        container.sort(new Object[] { PROP_TIME }, new boolean[] { true });
+        container.sort(new Object[]{PROP_TIME}, new boolean[]{true});
     }
 }
