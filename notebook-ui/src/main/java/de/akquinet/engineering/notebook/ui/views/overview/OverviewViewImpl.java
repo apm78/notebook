@@ -18,11 +18,13 @@ import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.model.NoteModel;
 import de.akquinet.engineering.notebook.ui.views.noteform.NoteForm;
 import de.akquinet.engineering.notebook.ui.views.vaadin.ConfirmationDialog;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Set;
 
@@ -38,17 +40,14 @@ public class OverviewViewImpl implements OverviewView
     private static final String PROP_TIME = "time";
     private static final String PROP_DELETE = "delete";
 
+    @Inject
+    private NoteModel noteModel;
+
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final BeanItemContainer<NoteDto> container = new BeanItemContainer<>(NoteDto.class);
     private final Panel editorPanel = new Panel();
-    private Observer observer;
     private final Grid grid = new Grid();
     private final NoteForm noteForm = new NoteForm();
-
-    public OverviewViewImpl()
-    {
-
-    }
 
     @PostConstruct
     public void init()
@@ -87,10 +86,8 @@ public class OverviewViewImpl implements OverviewView
                 confirmDlg.getDescription().setValue("Do you really want to delete this note?");
                 confirmDlg.getOkButton().addClickListener(e ->
                 {
-                    if (observer != null)
-                    {
-                        observer.onDelete(selectedNote);
-                    }
+                    noteModel.deleteNote(selectedNote);
+                    resetView();
                 });
                 confirmDlg.getOkButton().setCaption("Confirm");
                 confirmDlg.getCancelButton().setCaption("Cancel");
@@ -106,29 +103,20 @@ public class OverviewViewImpl implements OverviewView
         grid.setSelectionMode(Grid.SelectionMode.SINGLE);
         grid.addSelectionListener((SelectionEvent.SelectionListener) event ->
         {
-            if (observer != null)
+            final Set<Object> selected = event.getSelected();
+            if (selected.size() == 1)
             {
-                final Set<Object> selected = event.getSelected();
-                if (selected.size() == 1)
-                {
-                    final NoteDto selectedNote = (NoteDto) selected.iterator().next();
-                    observer.onSelect(selectedNote);
-                }
-                else
-                {
-                    observer.onSelect(null);
-                }
+                final NoteDto selectedNote = (NoteDto) selected.iterator().next();
+                showNote(selectedNote);
+            }
+            else
+            {
+                showNote(null);
             }
         });
         final Grid.FooterRow footer = grid.appendFooterRow();
         final Button addButton = new Button("Add Notes");
-        addButton.addClickListener((Button.ClickListener) event ->
-        {
-            if (observer != null)
-            {
-                observer.onAdd();
-            }
-        });
+        addButton.addClickListener((Button.ClickListener) event -> showNote(new NoteDto()));
         footer.getCell(PROP_DELETE).setComponent(addButton);
 
         final Label header = new Label("All Notes");
@@ -142,20 +130,37 @@ public class OverviewViewImpl implements OverviewView
         editorPanel.setSizeUndefined();
     }
 
-    @Override
-    public void setObserver(final Observer observer)
+    private void showNote(final NoteDto note)
     {
-        this.observer = observer;
+        if (note != null)
+        {
+            showEditor(note);
+        }
+        else
+        {
+            showEditor(null);
+        }
     }
 
     @Override
-    public void selectNote(final NoteDto note)
+    public void onEnter()
+    {
+        resetView();
+    }
+
+    private void resetView()
+    {
+        setNotes(noteModel.getNotes());
+        showEditor(null);
+        selectNote(null);
+    }
+
+    private void selectNote(final NoteDto note)
     {
         grid.select(note);
     }
 
-    @Override
-    public void showEditor(final NoteDto note)
+    private void showEditor(final NoteDto note)
     {
         if (note != null)
         {
@@ -165,10 +170,9 @@ public class OverviewViewImpl implements OverviewView
                 @Override
                 public void onSave()
                 {
-                    if (observer != null)
-                    {
-                        observer.onSave();
-                    }
+                    final NoteDto noteToSave = noteForm.getNote();
+                    noteModel.updateNote(noteToSave);
+                    resetView();
                 }
 
                 @Override
@@ -189,19 +193,12 @@ public class OverviewViewImpl implements OverviewView
     }
 
     @Override
-    public NoteDto getNote()
-    {
-        return noteForm.getNote();
-    }
-
-    @Override
     public <C> C getComponent(final Class<C> type)
     {
         return type.cast(rootLayout);
     }
 
-    @Override
-    public void setNotes(final Collection<NoteDto> notes)
+    private void setNotes(final Collection<NoteDto> notes)
     {
         container.removeAllItems();
         container.addAll(notes);

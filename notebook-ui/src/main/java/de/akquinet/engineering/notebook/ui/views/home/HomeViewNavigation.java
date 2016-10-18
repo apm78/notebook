@@ -13,20 +13,20 @@ import javax.inject.Inject;
 @CDIView(HomeViewNavigation.VIEW_NAME)
 public class HomeViewNavigation implements View, de.akquinet.engineering.notebook.ui.View
 {
-    public final static String VIEW_NAME = "";
+    public static final String VIEW_NAME = "";
 
     @Inject
-    private HomePresenter homePresenter;
+    private HomeView homeView;
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent)
     {
-        homePresenter.onEnter();
+        homeView.onEnter();
     }
 
     @Override
     public <C> C getComponent(final Class<C> type)
     {
-        return homePresenter.getView().getComponent(type);
+        return homeView.getComponent(type);
     }
 }
