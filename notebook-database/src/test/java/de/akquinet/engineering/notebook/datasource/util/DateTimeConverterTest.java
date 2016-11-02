@@ -1,6 +1,3 @@
-/*
- * WEAT EABR
- */
 package de.akquinet.engineering.notebook.datasource.util;
 
 import org.junit.Assert;
