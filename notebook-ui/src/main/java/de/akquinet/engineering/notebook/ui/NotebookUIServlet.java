@@ -1,6 +1,3 @@
-/*
- * WEAT EABR
- */
 package de.akquinet.engineering.notebook.ui;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
