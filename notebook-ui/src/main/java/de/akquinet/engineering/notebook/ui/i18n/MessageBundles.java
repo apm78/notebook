@@ -1,6 +1,3 @@
-/*
- * WEAT EABR
- */
 package de.akquinet.engineering.notebook.ui.i18n;
 
 import javax.enterprise.context.ApplicationScoped;

@@ -1,6 +1,3 @@
-/*
- * WEAT EABR
- */
 package de.akquinet.engineering.notebook.datasource.dao;
 
 import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
