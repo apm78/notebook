@@ -1,8 +1,8 @@
 package de.akquinet.engineering.notebook.datasource.dao;
 
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.datasource.entity.Note;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,15 +10,15 @@ import java.util.List;
  */
 public interface NoteDao
 {
-    List<NoteDto> getNotes(String userId);
+    List<Note> getNotes(String userId);
 
     int getNoteCount(String userId);
 
-    void deleteNote(NoteDto note, String userId);
+    void deleteNote(long noteId, String userId);
 
-    NoteDto updateNote(NoteDto note, String userId);
+    Note updateNote(Note note, String userId);
 
-    List<NoteDto> getNotesSortedByDateAscNotThan(String userId, LocalDateTime localDateTime);
+    List<Note> getNotesSortedByDateAscNotThan(String userId, Date localDateTime);
 
-    NoteDto findNoteById(long id, String userId);
+    Note findNoteById(long id, String userId);
 }

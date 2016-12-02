@@ -1,7 +1,5 @@
 package de.akquinet.engineering.notebook.ui.model;
 
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

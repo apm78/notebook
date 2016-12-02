@@ -14,7 +14,7 @@ import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.model.NoteDto;
 import de.akquinet.engineering.notebook.ui.i18n.I18n;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;
 import de.akquinet.engineering.notebook.ui.views.vaadin.LazyValidationFieldGroup;
