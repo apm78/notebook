@@ -24,11 +24,11 @@ public class Note extends AbstractEntity
 
     }
 
-    public Note(final String title, final String description, Date time)
+    public Note(final String title, final String description, final Date time)
     {
         this.title = title;
         this.description = description;
-        this.time = time;
+        setTime(time);
     }
 
     public String getTitle()
@@ -58,7 +58,7 @@ public class Note extends AbstractEntity
 
     public void setTime(final Date time)
     {
-        this.time = time;
+        this.time = new Date(time.getTime());
     }
 
     @Override

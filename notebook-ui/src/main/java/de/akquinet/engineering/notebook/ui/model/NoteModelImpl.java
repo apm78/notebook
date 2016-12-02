@@ -1,7 +1,8 @@
 package de.akquinet.engineering.notebook.ui.model;
 
 import de.akquinet.engineering.notebook.datasource.dao.NoteDao;
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.datasource.entity.Note;
+import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -9,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Axel Meier, akquinet engineering GmbH
@@ -35,7 +37,14 @@ public class NoteModelImpl implements NoteModel
     @Override
     public List<NoteDto> getNotes()
     {
-        return noteDao.getNotes(getUserLogin());
+        return toNoteDtoList(noteDao.getNotes(getUserLogin()));
+    }
+
+    private static List<NoteDto> toNoteDtoList(final List<Note> noteList){
+        return noteList
+                .stream()
+                .map(NoteDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -47,24 +56,25 @@ public class NoteModelImpl implements NoteModel
     @Override
     public void deleteNote(final NoteDto note)
     {
-        noteDao.deleteNote(note, getUserLogin());
+        noteDao.deleteNote(note.getId(), getUserLogin());
     }
 
     @Override
     public NoteDto updateNote(final NoteDto note)
     {
-        return noteDao.updateNote(note, getUserLogin());
+        return new NoteDto(noteDao.updateNote(note.toNote(), getUserLogin()));
     }
 
     @Override
     public List<NoteDto> getNotesSortedByDateAscNotOlderThan(final LocalDateTime dateTime)
     {
-        return noteDao.getNotesSortedByDateAscNotThan(getUserLogin(), dateTime);
+        return toNoteDtoList(noteDao
+                .getNotesSortedByDateAscNotThan(getUserLogin(), DateTimeConverter.toDate(dateTime)));
     }
 
     @Override
     public NoteDto findNoteById(final long id)
     {
-        return noteDao.findNoteById(id, getUserLogin());
+        return new NoteDto(noteDao.findNoteById(id, getUserLogin()));
     }
 }
