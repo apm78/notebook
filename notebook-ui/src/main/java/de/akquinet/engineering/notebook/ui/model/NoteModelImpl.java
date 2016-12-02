@@ -1,6 +1,5 @@
 package de.akquinet.engineering.notebook.ui.model;
 
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
 import de.akquinet.engineering.notebook.datasource.entity.Note;
 import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
 
@@ -61,6 +60,13 @@ public class NoteModelImpl implements NoteModel, Serializable
     public List<NoteDto> getNotes()
     {
         return noteList;
+    }
+
+    private static List<NoteDto> toNoteDtoList(final List<Note> noteList){
+        return noteList
+                .stream()
+                .map(NoteDto::new)
+                .collect(Collectors.toList());
     }
 
     @Override

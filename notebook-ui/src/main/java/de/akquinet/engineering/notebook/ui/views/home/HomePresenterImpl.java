@@ -1,7 +1,7 @@
 package de.akquinet.engineering.notebook.ui.views.home;
 
 import com.vaadin.cdi.UIScoped;
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.model.NoteDto;
 import de.akquinet.engineering.notebook.ui.View;
 import de.akquinet.engineering.notebook.ui.model.NoteModel;
 
