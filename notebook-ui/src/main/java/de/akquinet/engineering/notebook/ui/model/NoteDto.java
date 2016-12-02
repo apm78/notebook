@@ -1,4 +1,4 @@
-package de.akquinet.engineering.notebook.datasource.dto;
+package de.akquinet.engineering.notebook.ui.model;
 
 import de.akquinet.engineering.notebook.datasource.entity.Note;
 import de.akquinet.engineering.notebook.datasource.util.DateTimeConverter;
@@ -42,6 +42,12 @@ public class NoteDto
                     final String description, final Date time)
     {
         this(id, title, description, DateTimeConverter.toLocalDateTime(time));
+    }
+
+    public Note toNote(){
+        final Note note = new Note(title, description, DateTimeConverter.toDate(time));
+        note.setId(id);
+        return note;
     }
 
     public Long getId()

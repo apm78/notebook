@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderColumn;
+import javax.persistence.OrderBy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,8 +22,8 @@ public class Notebook extends AbstractEntity
     @ManyToOne
     private User user;
 
-    @OneToMany()
-    @OrderColumn(name = "INDEX")
+    @OneToMany
+    @OrderBy("time DESC")
     private List<Note> notes = new ArrayList<>();
 
     public Notebook()
@@ -48,6 +48,11 @@ public class Notebook extends AbstractEntity
     public void addNote(final Note note)
     {
         notes.add(note);
+    }
+
+    public void removeNote(final Note note)
+    {
+        notes.remove(note);
     }
 
     public Set<Note> returnOwnNotesNotInList(final List<Note> newNoteList)
