@@ -17,7 +17,7 @@ import com.vaadin.ui.renderers.ButtonRenderer;
 import com.vaadin.ui.renderers.ClickableRenderer;
 import com.vaadin.ui.renderers.DateRenderer;
 import com.vaadin.ui.themes.ValoTheme;
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.model.NoteDto;
 import de.akquinet.engineering.notebook.ui.views.noteform.NoteForm;
 import de.akquinet.engineering.notebook.ui.views.vaadin.ConfirmationDialog;
 import de.akquinet.engineering.notebook.ui.views.vaadin.DateToLocalDateTimeConverter;

@@ -9,7 +9,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.themes.ValoTheme;
-import de.akquinet.engineering.notebook.datasource.dto.NoteDto;
+import de.akquinet.engineering.notebook.ui.model.NoteDto;
 import de.akquinet.engineering.notebook.ui.views.noteform.NoteForm;
 
 import javax.annotation.PostConstruct;
