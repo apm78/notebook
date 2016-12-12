@@ -69,7 +69,7 @@ public class NotebookUI extends UI
         final Locale sessionLocale = (Locale) VaadinSession.getCurrent().getSession().getAttribute(SESSION_LOCALE);
         if (sessionLocale != null)
         {
-            setLocale(sessionLocale);
+            VaadinSession.getCurrent().setLocale(sessionLocale);
         }
     }
 
