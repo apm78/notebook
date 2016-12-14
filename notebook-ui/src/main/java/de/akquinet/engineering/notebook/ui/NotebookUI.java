@@ -138,7 +138,7 @@ public class NotebookUI extends UI
     }
 
     private static void logout(){
-        VaadinSession.getCurrent().getSession().invalidate();
         Page.getCurrent().reload();
+        VaadinSession.getCurrent().getSession().invalidate();
     }
 }
