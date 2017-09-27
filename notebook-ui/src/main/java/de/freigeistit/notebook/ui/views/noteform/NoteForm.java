@@ -3,16 +3,7 @@ package de.freigeistit.notebook.ui.views.noteform;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.shared.ui.datefield.Resolution;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.DateField;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import de.freigeistit.notebook.ui.i18n.I18n;
 import de.freigeistit.notebook.ui.model.NoteDto;
@@ -25,27 +16,33 @@ import javax.inject.Inject;
 /**
  * @author Axel P. Meier
  */
-public class NoteFormViewImpl implements NoteFormView
+public class NoteForm
 {
+    public interface Observer
+    {
+        void onSave();
+
+        void onCancel();
+    }
+
     private static final String PROP_TITLE = "title";
     private static final String PROP_DESCRIPTION = "description";
     private static final String PROP_TIME = "time";
 
-    @Inject
-    private I18n i18n;
+    private final I18n i18n;
 
     private final VerticalLayout rootLayout = new VerticalLayout();
     private final FieldGroup fieldGroup = new LazyValidationFieldGroup();
     private Observer observer;
     private final Label title = new Label();
 
-    public NoteFormViewImpl()
+    public NoteForm(final I18n i18n)
     {
-
+        this.i18n = i18n;
+        init();
     }
 
-    @PostConstruct
-    public void init(){
+    private void init(){
         final FormLayout formLayout = new FormLayout();
         formLayout.setWidth("100%");
 
@@ -114,30 +111,24 @@ public class NoteFormViewImpl implements NoteFormView
         rootLayout.addComponent(buttonLayout);
     }
 
-    @Override
-    public <C> C getComponent(final Class<C> type)
-    {
-        return type.cast(rootLayout);
-    }
-
-    @Override
-    public void setObserver(final Observer observer)
-    {
-        this.observer = observer;
-    }
-
-    @Override
     public void setNote(final NoteDto note)
     {
         fieldGroup.setItemDataSource(new BeanItem<>(note, NoteDto.class));
         title.setValue(i18n.get(note.getId() == null ? "note.form.newNote" : "note.form.editNote"));
     }
 
-    @Override
+    public Component getRootLayout(){
+        return rootLayout;
+    }
+
     public NoteDto getNote()
     {
         @SuppressWarnings("unchecked")
         final BeanItem<NoteDto> beanItem = (BeanItem<NoteDto>) fieldGroup.getItemDataSource();
         return beanItem.getBean();
+    }
+
+    public void setObserver(final Observer observer){
+        this.observer = observer;
     }
 }

@@ -10,16 +10,5 @@ import java.util.Collection;
  */
 public interface HomeView extends View
 {
-    void setObserver(Observer observer);
-
-    void setNotes(Collection<NoteDto> notes);
-
-    void showEditor(View editView);
-
-    void closeEditor();
-
-    interface Observer
-    {
-        void onEdit(long noteId);
-    }
+    void onEnter();
 }

@@ -16,17 +16,17 @@ public class HomeViewNavigation implements View, de.freigeistit.notebook.ui.View
     public final static String VIEW_NAME = "";
 
     @Inject
-    private HomePresenter homePresenter;
+    private HomeView homeView;
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent)
     {
-        homePresenter.onEnter();
+        homeView.onEnter();
     }
 
     @Override
     public <C> C getComponent(final Class<C> type)
     {
-        return homePresenter.getView().getComponent(type);
+        return homeView.getComponent(type);
     }
 }

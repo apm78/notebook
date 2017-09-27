@@ -15,17 +15,17 @@ public class OverviewViewNavigation implements View, de.freigeistit.notebook.ui.
     public final static String VIEW_NAME = "overview";
 
     @Inject
-    private OverviewPresenter presenter;
+    private OverviewView view;
 
     @Override
     public void enter(final ViewChangeListener.ViewChangeEvent viewChangeEvent)
     {
-        presenter.onEnter();
+        view.onEnter();
     }
 
     @Override
     public <C> C getComponent(final Class<C> type)
     {
-        return presenter.getView().getComponent(type);
+        return view.getComponent(type);
     }
 }

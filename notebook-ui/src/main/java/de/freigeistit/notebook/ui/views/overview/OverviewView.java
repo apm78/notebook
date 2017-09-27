@@ -10,21 +10,5 @@ import java.util.Collection;
  */
 public interface OverviewView extends View
 {
-    void setObserver(Observer observer);
-
-    void selectNote(final NoteDto note);
-
-    void setNotes(Collection<NoteDto> notes);
-
-    void setEditorView(View view);
-
-    void setEditorVisible(boolean visible);
-
-    interface Observer {
-        void onSelect(NoteDto selectedNote);
-
-        void onAdd();
-
-        void onDelete(NoteDto note);
-    }
+    void onEnter();
 }

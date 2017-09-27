@@ -13,11 +13,15 @@ import com.vaadin.ui.themes.ValoTheme;
 import de.freigeistit.notebook.ui.View;
 import de.freigeistit.notebook.ui.i18n.I18n;
 import de.freigeistit.notebook.ui.model.NoteDto;
+import de.freigeistit.notebook.ui.model.NoteModel;
+import de.freigeistit.notebook.ui.views.noteform.NoteForm;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * @author Axel P. Meier
@@ -28,13 +32,16 @@ public class HomeViewImpl implements HomeView
     @Inject
     private I18n i18n;
 
+    @Inject
+    private NoteModel noteModel;
+
     private final VerticalLayout rootLayout = new VerticalLayout();
 
     private final VerticalLayout noteLayout = new VerticalLayout();
 
-    private Observer observer;
-
     private Window editorWindow;
+
+    private NoteForm noteForm;
 
     public HomeViewImpl()
     {
@@ -42,6 +49,8 @@ public class HomeViewImpl implements HomeView
 
     @PostConstruct
     public void init(){
+        noteForm = new NoteForm(i18n);
+
         rootLayout.setMargin(true);
         final Label header = new Label(i18n.get("home.title"));
         header.addStyleName(ValoTheme.LABEL_H2);
@@ -54,9 +63,8 @@ public class HomeViewImpl implements HomeView
     }
 
     @Override
-    public void setObserver(final Observer observer)
-    {
-        this.observer = observer;
+    public void onEnter() {
+        setNotes(getNotesSortedByDateAscNotOlder1Hour());
     }
 
     @Override
@@ -65,8 +73,7 @@ public class HomeViewImpl implements HomeView
         return type.cast(rootLayout);
     }
 
-    @Override
-    public void setNotes(final Collection<NoteDto> notes)
+    private void setNotes(final Collection<NoteDto> notes)
     {
         final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern(i18n.get("home.timePattern"),
                 UI.getCurrent().getLocale());
@@ -86,15 +93,14 @@ public class HomeViewImpl implements HomeView
             timeLabel.addStyleName(ValoTheme.LABEL_BOLD);
             layout.addComponent(timeLabel);
             layout.addComponent(new Label(note.getDescription()));
-            layout.addComponent(new Button(i18n.get("home.editButton.caption"), e -> {
-                if (observer != null)
-                {
-                    observer.onEdit(note.getId());
-                }
-            }));
+            layout.addComponent(new Button(i18n.get("home.editButton.caption"), e -> onEdit(note)));
             panel.setContent(layout);
             noteLayout.addComponent(panel);
         }
+    }
+
+    private void onEdit(final NoteDto note){
+        showEditor(note);
     }
 
     private void closeEditorWindow()
@@ -106,9 +112,33 @@ public class HomeViewImpl implements HomeView
         }
     }
 
-    @Override
-    public void showEditor(final View editView)
+    private void save(){
+        final NoteDto noteToSave = noteForm.getNote();
+        noteModel.updateNote(noteToSave);
+
+        closeEditorWindow();
+        setNotes(getNotesSortedByDateAscNotOlder1Hour());
+    }
+
+    private void cancel(){
+        closeEditorWindow();
+    }
+
+    private void showEditor(final NoteDto note)
     {
+        noteForm.setObserver(new NoteForm.Observer() {
+            @Override
+            public void onSave() {
+                save();
+            }
+
+            @Override
+            public void onCancel() {
+                cancel();
+            }
+        });
+        noteForm.setNote(note);
+
         closeEditorWindow();
         editorWindow = new Window();
         editorWindow.center();
@@ -117,15 +147,14 @@ public class HomeViewImpl implements HomeView
         editorWindow.setClosable(true);
         final VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.setMargin(true);
-        verticalLayout.addComponent(editView.getComponent(Component.class));
+        verticalLayout.addComponent(noteForm.getRootLayout());
         editorWindow.setContent(verticalLayout);
         editorWindow.addCloseListener(e -> editorWindow = null);
         rootLayout.getUI().addWindow(editorWindow);
     }
 
-    @Override
-    public void closeEditor()
+    private List<NoteDto> getNotesSortedByDateAscNotOlder1Hour()
     {
-        closeEditorWindow();
+        return noteModel.getNotesSortedByDateAscNotOlderThan(LocalDateTime.now().minusHours(1));
     }
 }
