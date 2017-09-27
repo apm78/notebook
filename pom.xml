@@ -4,7 +4,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>de.akquinet.engineering.notebook</groupId>
+    <groupId>de.freigeistit.notebook</groupId>
     <artifactId>notebook</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -62,13 +62,13 @@
         <dependencies>
             <!-- notebook dependencies -->
             <dependency>
-                <groupId>de.akquinet.engineering.notebook</groupId>
+                <groupId>de.freigeistit.notebook</groupId>
                 <artifactId>notebook-ui</artifactId>
                 <type>war</type>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>de.akquinet.engineering.notebook</groupId>
+                <groupId>de.freigeistit.notebook</groupId>
                 <artifactId>notebook-database</artifactId>
                 <version>${project.version}</version>
             </dependency>

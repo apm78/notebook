@@ -10,7 +10,7 @@ This project uses Vaadin CDI and so a full application server is needed to run t
 It is tested with Wildfly 10.
 
 ## License
-Copyright 2016 akquinet engineering GmbH
+Copyright 2017 Axel P. Meier
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
